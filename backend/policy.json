@@ -1,0 +1,25 @@
+{
+  "version": "1.0",
+  "name": "Ad Click Policy",
+  "chain_type": "ethereum",
+  "method_rules": [
+    {
+      "method": "eth_sendTransaction",
+      "rules": [
+        {
+          "name": "Limit daily rewards",
+          "conditions": [
+            {
+              "field_source": "ethereum_transaction",
+              "field": "value",
+              "operator": "lte",
+              "value": "0.01"
+            }
+          ],
+          "action": "ALLOW"
+        }
+      ]
+    }
+  ],
+  "default_action": "DENY"
+}
