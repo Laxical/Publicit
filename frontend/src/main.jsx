@@ -4,6 +4,7 @@ import {PrivyProvider} from '@privy-io/react-auth';
 import {SmartWalletsProvider} from '@privy-io/react-auth/smart-wallets';
 import './index.css'
 import App from './App.jsx'
+import Header from './Header.jsx';
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
@@ -18,6 +19,7 @@ createRoot(document.getElementById('root')).render(
       }}
     >
       <SmartWalletsProvider>
+        <Header />
         <App />
       </SmartWalletsProvider>
     </PrivyProvider>
