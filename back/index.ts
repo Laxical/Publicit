@@ -4,6 +4,7 @@ import getAuthorizationSignature from "./AuthSign";
 import { PrivyClient } from "@privy-io/server-auth";
 import mongoose from "mongoose";
 import Company from "./schema/companyschema";
+import cors from "cors";
 
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
@@ -29,6 +30,31 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(cors());
+app.use(express.static("public"));
+
+interface ClickRequestBody {
+  userAddress: string;
+  adId: string;
+  redirectUrl: string;
+}
+
+app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res: Response): Promise<void> => {
+  try {
+      const { userAddress, adId, redirectUrl } = req.body;
+
+      if (!userAddress) {
+          res.status(400).json({ error: "User address is required" });
+          return;
+      }
+
+      console.log(`User ${userAddress} clicked on ad (ID: ${adId}, URL: ${redirectUrl}).`);
+
+      res.json({ message: "Click tracked, incentive processed.", user: userAddress });
+  } catch (error) {
+      res.status(500).json({ error: "Internal server error" });
+  }
+});
 
 app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
@@ -75,6 +101,7 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
     res.status(500).json({ error: "Failed to create wallet" });
   }
 });
+
 app.post("/create-company", async (req: Request, res: Response): Promise<any> => {
   try {
     const { companyName } = req.body;
@@ -99,6 +126,7 @@ app.post("/create-company", async (req: Request, res: Response): Promise<any> =>
     return res.status(500).json({ error: "Failed to create company" });
   }
 });
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
