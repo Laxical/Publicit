@@ -1,10 +1,15 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
-import getAuthorizationSignature from "./AuthSign";
+import getAuthorizationSignature from "./utils/AuthSign";
 import { PrivyClient } from "@privy-io/server-auth";
 import mongoose from "mongoose";
 import Company from "./schema/companyschema";
 import cors from "cors";
+import postPolicy from "./utils/policy";
+import createWallet from "./utils/createWallet";
+import axios from "axios";
+import * as fs from 'fs';
+
 
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
@@ -79,8 +84,6 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
 app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
     const { companyName, product } = req.body;
-    // companyName="fksad"
-    // product="daknj"
     let company = await Company.findOne({ companyName });
     if (!company) {
       return res.status(404).json("company not found");
@@ -92,30 +95,13 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
         walletAddress: company.products.get(product),
       });
     }
-    const authorizationSignature = getAuthorizationSignature({
-      // Replace with your desired path, e.g. '/v1/wallets/<wallet_id>/rpc'
-      url: "https://api.privy.io/v1/wallets",
-      // Replace with your desired body
-      body: { chain_type: "ethereum" },
-    });
-    const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
-    const { id, address, chainType } = await privy.walletApi.create({
-      chainType: "ethereum",
-      authorizationKeyIds: [authorizationID],
-    });
-    console.log("Wallet created:", id, address, chainType);
-    if (company && company.products) {
-      company.products.set(product, { productUrl: "https://example.com/", walletUniqueId: id });
-      await company.save();
-    }
 
-    // Return the newly created wallet info
-    res.json({
-      message: "Wallet created successfully!",
-      walletAddress: address,
-      companyName,
-      product,
-    });
+    const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
+    const policyIds= await postPolicy();
+    console.log("Policy ID:", policyIds);
+    await createWallet(policyIds);
+    return res.status(200).json({ message: "Wallet created successfully!" });
+
   } catch (error) {
     console.error("Error creating wallet:", error);
     res.status(500).json({ error: "Failed to create wallet" });
@@ -147,7 +133,6 @@ app.post("/create-company", async (req: Request, res: Response): Promise<any> =>
     return res.status(500).json({ error: "Failed to create company" });
   }
 });
-
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

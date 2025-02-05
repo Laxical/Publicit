@@ -36,5 +36,6 @@ export default function getAuthorizationSignature({url, body}: {url: string; bod
   // Sign the payload buffer with your private key and serialize the signature to a base64 string
   const signatureBuffer = crypto.sign('sha256', serializedPayloadBuffer, privateKey);
   const signature = signatureBuffer.toString('base64');
+  console.log(signature);
   return signature;
 }
