@@ -4,7 +4,7 @@ import LoginPage from './LoginPage';
 import ActionsPage from './ActionsPage';
 
 const App = () => {
-  const {user} = usePrivy();
+  const { user } = usePrivy();
   const [smartWallet, setSmartWallet] = useState(null);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const App = () => {
   return (
     <div className="app-container">
       {
-        user && smartWallet ? <ActionsPage smartWallet={smartWallet} /> : <LoginPage />
+        user ? <ActionsPage smartWallet={smartWallet} /> : <LoginPage />
       }
     </div>
   );

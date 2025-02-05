@@ -10,7 +10,7 @@ function Header() {
 
         {
             (!authenticated) ?
-            <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={() => login({ loginMethods: ["email", "sms"] })}>
+            <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={() => login({ loginMethods: ["email", "sms", "google"] })}>
                 Login
             </button> :
             <button className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded" onClick={() => logout()}>

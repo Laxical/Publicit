@@ -121,4 +121,3 @@ const WalletDashboard = () => {
 }
 
 export default WalletDashboard
-

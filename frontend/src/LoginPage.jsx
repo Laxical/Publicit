@@ -7,7 +7,7 @@ const LoginPage = () => {
     return (
         <div className="login-container">
             <h2>Login Page</h2>
-            <button onClick={() => login({loginMethods: ['email', 'sms']})}>
+            <button onClick={() => login({loginMethods: ['email', 'sms', 'login']})}>
                 Login with email and sms only
             </button>
         </div>
