@@ -43,6 +43,12 @@ function createWallet(policyIds) {
             console.log('Address:', response.data.address);
             console.log('Chain Type:', response.data.chain_type);
             console.log('Policy IDs:', response.data.policy_ids);
+            return ({
+                id: response.data.id,
+                address: response.data.address,
+                chain_type: response.data.chain_type,
+                policy_ids: response.data.policy_ids
+            });
         }
         catch (error) {
             if (axios_1.default.isAxiosError(error)) {

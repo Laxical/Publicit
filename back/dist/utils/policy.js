@@ -59,28 +59,6 @@ function postPolicy() {
             const response = yield axios_1.default.post(url, policyData, { headers });
             const policy = response.data;
             console.log('Policy created successfully!');
-            // console.log(`ID: ${policy.id}`);
-            // console.log(`Name: ${policy.name}`);
-            // console.log(`Version: ${policy.version}`);
-            // console.log(`Chain Type: ${policy.chain_type}`);
-            // console.log(`Default Action: ${policy.default_action}`);
-            // Display method rules
-            // policy.method_rules.forEach((rule: any, index: number) => {
-            //     console.log(`Method Rule ${index + 1}:`);
-            //     console.log(`Method: ${rule.method}`);
-            //     rule.rules.forEach((ruleDetail: any, ruleIndex: number) => {
-            //         console.log(`  Rule ${ruleIndex + 1}:`);
-            //         console.log(`    Name: ${ruleDetail.name}`);
-            //         console.log(`    Action: ${ruleDetail.action}`);
-            //         ruleDetail.conditions.forEach((condition: any, conditionIndex: number) => {
-            //             console.log(`      Condition ${conditionIndex + 1}:`);
-            //             console.log(`        Field Source: ${condition.field_source}`);
-            //             console.log(`        Field: ${condition.field}`);
-            //             console.log(`        Operator: ${condition.operator}`);
-            //             console.log(`        Value: ${condition.value}`);
-            //         });
-            //     });
-            // });
             return policy.id;
         }
         catch (error) {

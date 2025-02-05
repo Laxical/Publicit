@@ -66,11 +66,9 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
         res.status(500).json({ error: "Internal server error" });
     }
 }));
-app.post("/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { companyName, product } = req.body;
-        // companyName="fksad"
-        // product="daknj"
+        const { companyName, product, productUrl } = req.body;
         let company = yield companyschema_1.default.findOne({ companyName });
         if (!company) {
             return res.status(404).json("company not found");
@@ -84,23 +82,16 @@ app.post("/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, funct
         const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
         const policyIds = yield (0, policy_1.default)();
         console.log("Policy ID:", policyIds);
-        // const { id, address, chainType } = await privy.walletApi.create({
-        //   chainType: "ethereum",
-        //   authorizationKeyIds: [authorizationID],
-        // });
-        // console.log("Wallet created:", id, address, chainType);
-        // if (company && company.products) {
-        //   company.products.set(product, { productUrl: "https://example.com/", walletUniqueId: id });
-        //   await company.save();
-        // }
-        // // Return the newly created wallet info
-        // res.json({
-        //   message: "Wallet created successfully!",
-        //   walletAddress: address,
-        //   companyName,
-        //   product,
-        // });
-        yield (0, createWallet_1.default)(policyIds);
+        const wallet = yield (0, createWallet_1.default)(policyIds);
+        if (!wallet) {
+            throw new Error("Failed to create wallet");
+        }
+        const { id, address } = wallet;
+        console.log("Wallet created:", id, address, companyName, product, productUrl);
+        if (company && company.products) {
+            company.products.set(product, { productUrl, walletUniqueId: id });
+            yield company.save();
+        }
         return res.status(200).json({ message: "Wallet created successfully!" });
     }
     catch (error) {
@@ -108,10 +99,9 @@ app.post("/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.status(500).json({ error: "Failed to create wallet" });
     }
 }));
-app.post("/create-company", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/api/create-company", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { companyName } = req.body;
-        console.log(companyName, "\n\n\n\n\n\n");
         // Check if the company already exists
         let company = yield companyschema_1.default.findOne({ companyName });
         if (company) {
@@ -124,6 +114,21 @@ app.post("/create-company", (req, res) => __awaiter(void 0, void 0, void 0, func
         });
         yield company.save(); // Save the company to the database
         return res.status(201).json({ message: "Company created successfully", company });
+    }
+    catch (error) {
+        console.error("Error creating company:", error);
+        return res.status(500).json({ error: "Failed to create company" });
+    }
+}));
+app.get("/api/get-products/:companyName", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { companyName } = req.params;
+        console.log(companyName);
+        let company = yield companyschema_1.default.findOne({ companyName });
+        if (!company) {
+            return res.status(400).json({ message: "Company doesn't exists" });
+        }
+        return res.status(201).json({ message: "Products fetched succesfully!", company });
     }
     catch (error) {
         console.error("Error creating company:", error);
