@@ -35,20 +35,40 @@ app.use(express.static("public"));
 
 interface ClickRequestBody {
   userAddress: string;
-  adId: string;
+  companyName: string;
   redirectUrl: string;
+  product: string;
 }
 
 app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res: Response): Promise<void> => {
   try {
-      const { userAddress, adId, redirectUrl } = req.body;
+      const { userAddress, companyName, redirectUrl, product } = req.body;
 
       if (!userAddress) {
           res.status(400).json({ error: "User address is required" });
           return;
       }
 
-      console.log(`User ${userAddress} clicked on ad (ID: ${adId}, URL: ${redirectUrl}).`);
+      let company = await Company.findOne({ companyName: companyName });
+      
+      if (!company) {
+        res.status(404).json({ error: "Company not found" });
+        return;
+      }
+  
+      const productData = company.products?.get(product);
+  
+      if (!productData) {
+        res.status(404).json({ error: "Product not found" });
+        return;
+      }
+  
+      if (productData.productUrl !== redirectUrl) {
+        res.status(400).json({ error: "Redirect URL does not match the product URL" });
+        return;
+      }
+
+      console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
 
       res.json({ message: "Click tracked, incentive processed.", user: userAddress });
   } catch (error) {
@@ -85,7 +105,7 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
     });
     console.log("Wallet created:", id, address, chainType);
     if (company && company.products) {
-      company.products.set(product, id);
+      company.products.set(product, { productUrl: "https://example.com/", walletUniqueId: id });
       await company.save();
     }
 
@@ -105,6 +125,7 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
 app.post("/create-company", async (req: Request, res: Response): Promise<any> => {
   try {
     const { companyName } = req.body;
+    console.log(companyName,"\n\n\n\n\n\n");
 
     // Check if the company already exists
     let company = await Company.findOne({ companyName });

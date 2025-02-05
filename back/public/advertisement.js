@@ -18,8 +18,9 @@
     const adImageUrl = scriptTag.getAttribute("data-ad-image");
     const adWidth = scriptTag.getAttribute("data-ad-width") || "300px";
     const adHeight = scriptTag.getAttribute("data-ad-height") || "250px";
-    const adId = scriptTag.getAttribute("data-ad-id");
+    const companyName = scriptTag.getAttribute("data-ad-id");
     const redirectUrl = scriptTag.getAttribute("redirect-url");
+    const product = scriptTag.getAttribute("product");
 
     let adContainer = document.createElement("div");
     adContainer.style.display = "flex";
@@ -46,7 +47,7 @@
         fetch("http://localhost:3000/api/track-click", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userAddress, adId, redirectUrl })
+            body: JSON.stringify({ userAddress, companyName, redirectUrl, product })
         }).then(response => response.json())
           .then(data => console.log("Click Tracked", data))
           .catch(error => console.error("Error tracking click:", error));
