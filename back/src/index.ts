@@ -81,9 +81,9 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
   }
 });
 
-app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => {
+app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { companyName, product } = req.body;
+    const { companyName, product, productUrl } = req.body;
     let company = await Company.findOne({ companyName });
     if (!company) {
       return res.status(404).json("company not found");
@@ -100,6 +100,11 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
     const policyIds= await postPolicy();
     console.log("Policy ID:", policyIds);
     await createWallet(policyIds);
+    // console.log("Wallet created:", id, address, companyName, product, productUrl);
+    // if (company && company.products) {
+    //   company.products.set(product, { productUrl, walletUniqueId: id });
+    //   await company.save();
+    // }
     return res.status(200).json({ message: "Wallet created successfully!" });
 
   } catch (error) {
@@ -108,10 +113,9 @@ app.post("/create-wallet", async (req: Request, res: Response): Promise<any> => 
   }
 });
 
-app.post("/create-company", async (req: Request, res: Response): Promise<any> => {
+app.post("/api/create-company", async (req: Request, res: Response): Promise<any> => {
   try {
     const { companyName } = req.body;
-    console.log(companyName,"\n\n\n\n\n\n");
 
     // Check if the company already exists
     let company = await Company.findOne({ companyName });
@@ -133,6 +137,25 @@ app.post("/create-company", async (req: Request, res: Response): Promise<any> =>
     return res.status(500).json({ error: "Failed to create company" });
   }
 });
+
+app.get("/api/get-products/:companyName", async (req: Request, res: Response): Promise<any> => {
+  try {
+    const { companyName } = req.params;
+
+    console.log(companyName);
+
+    let company = await Company.findOne({ companyName });
+    if (!company) {
+      return res.status(400).json({ message: "Company doesn't exists" });
+    }
+
+    return res.status(201).json({ message: "Products fetched succesfully!", company });
+  } catch (error) {
+    console.error("Error creating company:", error);
+    return res.status(500).json({ error: "Failed to create company" });
+  }
+})
+
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
