@@ -35,8 +35,6 @@ export default async function sendEthTransaction(walletId: string, transaction: 
   console.log("transaction value: ", transaction.value);
   console.log("To Address: ", transaction.to);
   console.log("wallet Id: ",walletId);
-  const valueInWei = "0x" + (transaction.value * 1e18).toString(16);
-
 
   const requestBody = {
     chain_type: "ethereum",
@@ -45,7 +43,7 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     params: {
       transaction: {
         to: transaction.to,
-        value: 10000000000000000,
+        value: 11000000000000000,
         chain_id: 421614
       }
     }

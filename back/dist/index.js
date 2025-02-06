@@ -18,6 +18,7 @@ const server_auth_1 = require("@privy-io/server-auth");
 const mongoose_1 = __importDefault(require("mongoose"));
 const companyschema_1 = __importDefault(require("./schema/companyschema"));
 const cors_1 = __importDefault(require("cors"));
+const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
 dotenv_1.default.config();
@@ -83,16 +84,16 @@ app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, f
                 walletAddress: company.products.get(product),
             });
         }
-        // const policyIds= await postPolicy();
-        // console.log("Policy ID:", policyIds);
-        const wallet = yield (0, createWallet_1.default)();
+        const policyIds = yield (0, policy_1.default)();
+        console.log("Policy ID:", policyIds);
+        const wallet = yield (0, createWallet_1.default)(policyIds);
         if (!wallet) {
             throw new Error("Failed to create wallet");
         }
         const { id, address } = wallet;
         console.log("Wallet created:", id, address, companyName, product, productUrl);
         if (company && company.products) {
-            company.products.set(product, { productUrl, walletUniqueId: id });
+            company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds });
             yield company.save();
         }
         return res.status(200).json({ message: "Wallet created successfully!" });

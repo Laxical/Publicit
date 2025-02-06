@@ -102,16 +102,16 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
       });
     }
 
-    // const policyIds= await postPolicy();
-    // console.log("Policy ID:", policyIds);
-    const wallet = await createWallet();
+    const policyIds= await postPolicy();
+    console.log("Policy ID:", policyIds);
+    const wallet = await createWallet(policyIds);
     if (!wallet) {
       throw new Error("Failed to create wallet");
     }
     const { id, address } = wallet;
     console.log("Wallet created:", id, address, companyName, product, productUrl);
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id });
+      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds });
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });

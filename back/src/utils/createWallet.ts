@@ -5,21 +5,21 @@ import getAuthorizationSignature from './AuthSign';
 
 dotenv.config();
 
-export default async function createWallet() {
+export default async function createWallet(policyIds: string) {
     const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
    const privyAppId = process.env.PRIVY_APP_ID;
    const privyAppSecret = process.env.PRIVY_APP_SECRET;
    const url = 'https://api.privy.io/v1/wallets';
    const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
 
-   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum',authorization_key_ids:[authorizationID]} });
+   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds], authorization_key_ids:[authorizationID]} });
 
    try {
       const response = await axios.post(
          url,
          {
             chain_type: 'ethereum',
-            // policy_ids: [policyIds],
+            policy_ids: [policyIds],
             authorization_key_ids:[authorizationID]  // Passing policyIds in the request body
          },
          {
@@ -37,12 +37,12 @@ export default async function createWallet() {
       console.log('ID:', response.data.id);
       console.log('Address:', response.data.address);
       console.log('Chain Type:', response.data.chain_type);
-      // console.log('Policy IDs:', response.data.policy_ids);
+      console.log('Policy IDs:', response.data.policy_ids);
       return ({
          id: response.data.id,
          address: response.data.address,
          chain_type: response.data.chain_type,
-         // policy_ids: response.data.policy_ids
+         policy_ids: response.data.policy_ids
       })
 
    } catch (error) {
