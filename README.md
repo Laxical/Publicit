@@ -35,7 +35,7 @@ A decentralized advertising platform that revolutionizes digital advertising by 
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/laxical-publi-cité.git
+git clone https://github.com/Laxical/Publicit.git
 ```
 
 2. Install backend dependencies:
