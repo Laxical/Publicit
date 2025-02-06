@@ -74,7 +74,7 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
         return;
       }
       await sendTransaction(productData.walletUniqueId, {
-        to: "0x487a30c88900098b765d76285c205c7c47582512",
+        to: userAddress,
         value: 0.0001
       });
 
