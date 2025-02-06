@@ -11,6 +11,7 @@ function ProductDisplay() {
     try {
       const response = await axios.get(`http://localhost:3000/api/get-products/${companyName}`);
       setProducts(response.data.company.products);
+      console.log(response.data.company.products);
       setError("");
     } catch (error) {
       console.log(error);

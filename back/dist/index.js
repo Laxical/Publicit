@@ -61,8 +61,8 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
             return;
         }
         yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
-            to: "0x487a30c88900098b765d76285c205c7c47582512",
-            value: 0.0001
+            to: userAddress,
+            value: 10000000000000000
         });
         console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
         res.json({ message: "Click tracked, incentive processed.", user: userAddress });
