@@ -11,6 +11,7 @@ const companySchema = new mongoose_1.default.Schema({
         of: {
             productUrl: { type: String, required: true },
             walletUniqueId: { type: String, required: true },
+            policyId: { type: String, required: false }
         },
     },
 });
