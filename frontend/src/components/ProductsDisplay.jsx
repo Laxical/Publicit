@@ -31,10 +31,10 @@ export default function ProductDisplay() {
     }
   }
 
-  const generateSnippet = (productName, productData) => {
-    console.log("here", productName);
-    return `<script async src="http://localhost:3000/advertisement.js" data-ad-image="${productData.imageUrl}" data-ad-width="400px" data-ad-height="350px" data-ad-id="${companyName}" redirect-url="${productData.productUrl}" product="${productName}"></script>`
-  }
+  // const generateSnippet = (productName, productData) => {
+  //   console.log("here", productName);
+  //   return `<script async src="http://localhost:3000/advertisement.js" data-ad-image="${productData.imageUrl}" data-ad-width="400px" data-ad-height="350px" data-ad-id="${companyName}" redirect-url="${productData.productUrl}" product="${productName}"></script>`
+  // }
 
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text).then(
@@ -46,6 +46,49 @@ export default function ProductDisplay() {
       },
     )
   }
+
+  const generateSnippet = (productName, productData) => {
+    const htmlSnippet = `<script async src="http://localhost:3000/advertisement.js" 
+  data-ad-image="${productData.imageUrl}" 
+  data-ad-width="400px" 
+  data-ad-height="350px" 
+  data-ad-id="${companyName}" 
+  redirect-url="${productData.productUrl}" 
+  product="${productName}"
+>
+</script>`;
+  
+    const reactSnippet = `import { useRef, useEffect } from "react";
+
+const AdComponent = () => {
+  const adRef = useRef(null);
+  const hasRun = useRef(false);
+
+  useEffect(() => {
+      if (!adRef.current || hasRun.current) return;
+      hasRun.current = true;
+
+      const script = document.createElement("script");
+      script.src = "http://localhost:3000/advertisement.js";
+      script.async = true;
+
+      script.setAttribute("data-ad-image", "${productData.imageUrl}");
+      script.setAttribute("data-ad-width", "400px");
+      script.setAttribute("data-ad-height", "350px");
+      script.setAttribute("data-ad-id", "${companyName}");
+      script.setAttribute("redirect-url", "${productData.productUrl}");
+      script.setAttribute("product", "${productName}");
+
+      adRef.current.appendChild(script);
+  }, []);
+
+  return <div ref={adRef} id="ad-container"></div>;
+};
+
+export default AdComponent;`;
+  
+    return { htmlSnippet, reactSnippet };
+  };
 
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">
@@ -99,25 +142,42 @@ export default function ProductDisplay() {
             {products && (
               <div className="mt-6 space-y-4">
                 <h2 className="text-xl font-semibold mb-2">Embedded Link Snippets:</h2>
-                {Object.entries(products).map(([productName, productData]) => (
-                  <Card key={productName} className="overflow-hidden">
-                    <CardHeader>
-                      <CardTitle>{productName}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm">
-                        {generateSnippet(productName, productData)}
-                      </pre>
-                      <Button
-                        onClick={() => copyToClipboard(generateSnippet(productName, productData))}
-                        className="mt-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                      >
-                        <Copy className="mr-2 h-4 w-4" />
-                        Copy Snippet
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+                {Object.entries(products).map(([productName, productData]) => {
+                  const { htmlSnippet, reactSnippet } = generateSnippet(productName, productData);
+
+                  return (
+                    <Card key={productName} className="overflow-hidden">
+                      <CardHeader>
+                        <CardTitle>{productName}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <h3 className="text-lg font-medium mb-2">HTML Embed:</h3>
+                        <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm">
+                          {htmlSnippet}
+                        </pre>
+                        <Button
+                          onClick={() => copyToClipboard(htmlSnippet)}
+                          className="mt-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+                        >
+                          <Copy className="mr-2 h-4 w-4" />
+                          Copy HTML Snippet
+                        </Button>
+
+                        <h3 className="text-lg font-medium mt-4 mb-2">React Embed:</h3>
+                        <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm">
+                          {reactSnippet}
+                        </pre>
+                        <Button
+                          onClick={() => copyToClipboard(reactSnippet)}
+                          className="mt-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
+                        >
+                          <Copy className="mr-2 h-4 w-4" />
+                          Copy React Snippet
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
               </div>
             )}
           </CardContent>

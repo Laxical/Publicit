@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Loader2 } from 'lucide-react'
+import AdComponent from "./ads/Ad1"
 
 export default function CompanyRegistration() {
   const [companyName, setCompanyName] = useState("")
@@ -91,6 +92,7 @@ export default function CompanyRegistration() {
           </CardContent>
         </Card>
       </div>
+      <AdComponent />
     </section>
   )
 }
