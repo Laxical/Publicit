@@ -76,7 +76,7 @@ export default function AddProduct() {
   }
 
   return (
-    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800">
+    <section className="w-full py-12 md:py-24 lg:py-32 bg-gradient-to-b from-white to-gray-100 dark:from-gray-900 dark:to-gray-800 min-h-screen">
       <div className="container max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Card className="w-full shadow-lg">
           <CardHeader className="space-y-1">
