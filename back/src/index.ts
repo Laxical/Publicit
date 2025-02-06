@@ -7,6 +7,7 @@ import Company from "./schema/companyschema";
 import cors from "cors";
 import postPolicy from "./utils/policy";
 import createWallet from "./utils/createWallet";
+import sendTransaction from "./utils/sendTransaction";
 import axios from "axios";
 import * as fs from 'fs';
 
@@ -72,6 +73,11 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
         res.status(400).json({ error: "Redirect URL does not match the product URL" });
         return;
       }
+      await sendTransaction(productData.walletUniqueId, {
+        to: "0x487a30c88900098b765d76285c205c7c47582512",
+        value: 0.0001
+      });
+
 
       console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
 
@@ -96,7 +102,6 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
       });
     }
 
-    const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
     const policyIds= await postPolicy();
     console.log("Policy ID:", policyIds);
     const wallet = await createWallet(policyIds);

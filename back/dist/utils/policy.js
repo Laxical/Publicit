@@ -39,7 +39,7 @@ function postPolicy() {
                                     "field_source": "ethereum_transaction",
                                     "field": "value",
                                     "operator": "lte",
-                                    "value": "500000000"
+                                    "value": "10000000000000000"
                                 }
                             ],
                             "action": "ALLOW"

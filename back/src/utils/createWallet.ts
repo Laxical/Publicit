@@ -6,20 +6,21 @@ import getAuthorizationSignature from './AuthSign';
 dotenv.config();
 
 export default async function createWallet(policyIds: string) {
-   console.log("hiot",policyIds);
+    const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
    const privyAppId = process.env.PRIVY_APP_ID;
    const privyAppSecret = process.env.PRIVY_APP_SECRET;
    const url = 'https://api.privy.io/v1/wallets';
    const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
 
-   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds] } });
+   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds],authorization_key_ids:[authorizationID]} });
 
    try {
       const response = await axios.post(
          url,
          {
             chain_type: 'ethereum',
-            policy_ids: [policyIds],  // Passing policyIds in the request body
+            policy_ids: [policyIds],
+            authorization_key_ids:[authorizationID]  // Passing policyIds in the request body
          },
          {
             headers: {

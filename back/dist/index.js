@@ -20,6 +20,7 @@ const companyschema_1 = __importDefault(require("./schema/companyschema"));
 const cors_1 = __importDefault(require("cors"));
 const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
+const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
 const db = mongoose_1.default.connection;
@@ -59,6 +60,10 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(400).json({ error: "Redirect URL does not match the product URL" });
             return;
         }
+        yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
+            to: "0x487a30c88900098b765d76285c205c7c47582512",
+            value: 0.0001
+        });
         console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
         res.json({ message: "Click tracked, incentive processed.", user: userAddress });
     }
@@ -79,7 +84,6 @@ app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, f
                 walletAddress: company.products.get(product),
             });
         }
-        const authorizationID = process.env.PRIVY_AUTHORIZATION_KEY_ID;
         const policyIds = yield (0, policy_1.default)();
         console.log("Policy ID:", policyIds);
         const wallet = yield (0, createWallet_1.default)(policyIds);
