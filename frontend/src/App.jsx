@@ -5,6 +5,8 @@ import CompanyRegistration from "./components/CompanyRegistration"
 import AddProduct from "./components/AddProduct"
 import Home from "./components/Home"
 import ProductDisplay from './components/ProductsDisplay';
+import LandingPage from './components/landingPage';
+import { Header } from './components/c/header';
 
 const App = () => {
   const { user } = usePrivy();
@@ -12,7 +14,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="App">
+      {/* <div className="App">
         <nav className="bg-gray-800 text-white p-4">
           <ul className="flex space-x-4">
             <li>
@@ -34,17 +36,19 @@ const App = () => {
               <Link to="/product-display" className="hover:underline">Product Display</Link>
             </li>
           </ul>
-        </nav>
+        </nav> */}
+        <Header/>
 
-        <main className="container mx-auto mt-8 p-4">
+        <main>
           <Routes>
-            <Route path="/" element={<Home />} />
             <Route path="/register-company" element={<CompanyRegistration />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/product-display" element={<ProductDisplay />} />
+            <Route path="/" element={<LandingPage />} />
           </Routes>
         </main>
-      </div>
+        
+      {/* </div> */}
     </Router>
   )
 }
