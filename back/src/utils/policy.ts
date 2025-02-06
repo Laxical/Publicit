@@ -17,7 +17,8 @@ export default async function postPolicy() {
     const url = 'https://api.privy.io/v1/policies';
 
     // Read policy from file
-    const policyData = {"version": "1.0",
+    const policyData = {
+        "version": "1.0",
         "name": "T",
         "chain_type": "ethereum",
         "method_rules": [{

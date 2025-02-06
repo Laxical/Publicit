@@ -19,6 +19,7 @@ const AuthSign_1 = __importDefault(require("./AuthSign"));
 dotenv_1.default.config();
 function sendEthTransaction(walletId, transaction) {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         console.log("Starting transaction process...");
         const privyAppId = process.env.PRIVY_APP_ID;
         const privyAppSecret = process.env.PRIVY_APP_SECRET;
@@ -29,18 +30,26 @@ function sendEthTransaction(walletId, transaction) {
         // Base64 encode for basic authentication
         const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
         console.log("transaction value: ", transaction.value);
-        const valueInWei = "0x" + (transaction.value * 1e18).toString(16);
+        console.log("To Address: ", transaction.to);
+        console.log("wallet Id: ", walletId);
         const requestBody = {
+            chain_type: "ethereum",
             method: "eth_sendTransaction",
             caip2: "eip155:421614",
             params: {
                 transaction: {
                     to: transaction.to,
-                    value: valueInWei,
+                    value: 10000000000000000,
+                    chain_id: 421614
                 }
             }
         };
-        console.log("Request payload:", JSON.stringify(requestBody, null, 2));
+        try {
+            console.log("Request payload:", JSON.stringify(requestBody, null, 2));
+        }
+        catch (error) {
+            console.log(error);
+        }
         const headers = {
             'privy-app-id': privyAppId,
             'Content-Type': 'application/json',
@@ -50,6 +59,7 @@ function sendEthTransaction(walletId, transaction) {
                 body: requestBody
             })
         };
+        console.log("Header: ", headers);
         try {
             const response = yield axios_1.default.post(url, requestBody, { headers });
             console.log('Transaction sent successfully!');
@@ -58,7 +68,7 @@ function sendEthTransaction(walletId, transaction) {
         }
         catch (error) {
             if (axios_1.default.isAxiosError(error)) {
-                console.log(error);
+                console.log('Error Response:', (_a = error.response) === null || _a === void 0 ? void 0 : _a.data);
             }
             else {
                 console.error('Unexpected error:', error);

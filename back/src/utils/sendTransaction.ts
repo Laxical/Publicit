@@ -33,21 +33,27 @@ export default async function sendEthTransaction(walletId: string, transaction: 
   const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
 
   console.log("transaction value: ", transaction.value);
-  const valueInWei = "0x" + (transaction.value * 1e18).toString(16);
-
+  console.log("To Address: ", transaction.to);
+  console.log("wallet Id: ",walletId);
 
   const requestBody = {
+    chain_type: "ethereum",
     method: "eth_sendTransaction",
     caip2: "eip155:421614",
     params: {
       transaction: {
         to: transaction.to,
-        value: valueInWei,
+        value: 11000000000000000,
+        chain_id: 421614
       }
     }
   };
 
-  console.log("Request payload:", JSON.stringify(requestBody, null, 2));
+  try {
+    console.log("Request payload:", JSON.stringify(requestBody, null, 2));
+  } catch (error) {
+    console.log(error);
+  }
 
   const headers = {
     'privy-app-id': privyAppId,
@@ -59,6 +65,8 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     })
   };
 
+  console.log("Header: ", headers);
+
   try {
     const response = await axios.post<TransactionResponse>(url, requestBody, { headers });
     console.log('Transaction sent successfully!');
@@ -66,7 +74,7 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.log(error);
+      console.log('Error Response:', error.response?.data);
     } else {
       console.error('Unexpected error:', error);
     }
