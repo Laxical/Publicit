@@ -24,7 +24,8 @@ function createWallet(policyIds) {
         const privyAppSecret = process.env.PRIVY_APP_SECRET;
         const url = 'https://api.privy.io/v1/wallets';
         const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
-        const signature = (0, AuthSign_1.default)({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds], authorization_key_ids: [authorizationID] } });
+        // const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds],authorization_key_ids:[authorizationID]} });
+        const signature = (0, AuthSign_1.default)({ url, body: { chain_type: 'ethereum', authorization_key_ids: [authorizationID], policy_ids: [policyIds] } });
         try {
             const response = yield axios_1.default.post(url, {
                 chain_type: 'ethereum',
@@ -38,6 +39,21 @@ function createWallet(policyIds) {
                     Authorization: authHeader,
                 },
             });
+            // const response = await axios.post(
+            //    url,
+            //    {
+            //       chain_type: 'ethereum',
+            //       authorization_key_ids:[authorizationID]  // Passing policyIds in the request body
+            //    },
+            //    {
+            //       headers: {
+            //          'privy-app-id': privyAppId,
+            //          'privy-authorization-signature': signature,
+            //          'Content-Type': 'application/json',
+            //          Authorization: authHeader,
+            //       },
+            //    }
+            // );
             // Log the successful response data
             console.log('Wallet created successfully:');
             console.log('ID:', response.data.id);
@@ -48,12 +64,12 @@ function createWallet(policyIds) {
                 id: response.data.id,
                 address: response.data.address,
                 chain_type: response.data.chain_type,
-                policy_ids: response.data.policy_ids
+                // policy_ids: response.data.policy_ids
             });
         }
         catch (error) {
             if (axios_1.default.isAxiosError(error)) {
-                console.error('Error creating wallet:', error.response ? error.response.data : error.message);
+                console.error('Error creating wallet:', error);
             }
             else {
                 console.error('Error creating wallet:', error.message);

@@ -7,6 +7,7 @@ const companySchema = new mongoose.Schema({
     of: {
       productUrl: { type: String, required: true },
       walletUniqueId: { type: String, required: true },
+      policyId:{type: String, required: false}
     },
   },
 });

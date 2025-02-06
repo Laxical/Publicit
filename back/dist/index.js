@@ -21,6 +21,7 @@ const cors_1 = __importDefault(require("cors"));
 const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
+const updatePolicy_1 = __importDefault(require("./utils/updatePolicy"));
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
 const db = mongoose_1.default.connection;
@@ -93,7 +94,7 @@ app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, f
         const { id, address } = wallet;
         console.log("Wallet created:", id, address, companyName, product, productUrl);
         if (company && company.products) {
-            company.products.set(product, { productUrl, walletUniqueId: id });
+            company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds });
             yield company.save();
         }
         return res.status(200).json({ message: "Wallet created successfully!" });
@@ -137,6 +138,17 @@ app.get("/api/get-products/:companyName", (req, res) => __awaiter(void 0, void 0
     catch (error) {
         console.error("Error creating company:", error);
         return res.status(500).json({ error: "Failed to create company" });
+    }
+}));
+app.patch("/api/update-policy", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { policyId } = req.body;
+        yield (0, updatePolicy_1.default)(policyId);
+        return res.status(200).json("updated successfully");
+    }
+    catch (error) {
+        console.error("Error creating company:", error);
+        return res.status(500).json({ error: "Failed to update company" });
     }
 }));
 app.listen(PORT, () => {

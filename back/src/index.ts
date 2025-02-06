@@ -8,6 +8,7 @@ import cors from "cors";
 import postPolicy from "./utils/policy";
 import createWallet from "./utils/createWallet";
 import sendTransaction from "./utils/sendTransaction";
+import updatePolicy from "./utils/updatePolicy";
 import axios from "axios";
 import * as fs from 'fs';
 
@@ -111,11 +112,10 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
     const { id, address } = wallet;
     console.log("Wallet created:", id, address, companyName, product, productUrl);
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id });
+      company.products.set(product, { productUrl, walletUniqueId: id ,policyId:policyIds});
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });
-
   } catch (error) {
     console.error("Error creating wallet:", error);
     res.status(500).json({ error: "Failed to create wallet" });
@@ -164,7 +164,17 @@ app.get("/api/get-products/:companyName", async (req: Request, res: Response): P
     return res.status(500).json({ error: "Failed to create company" });
   }
 })
-
+app.patch("/api/update-policy", async (req: Request, res: Response): Promise<any> => {
+  try {
+    const {policyId} = req.body;
+    await updatePolicy(policyId);
+    return res.status(200).json("updated successfully")
+  }catch (error) {
+    console.error("Error creating company:", error);
+    return res.status(500).json({ error: "Failed to update company" });
+  }
+  
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

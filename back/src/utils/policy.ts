@@ -29,7 +29,7 @@ export default async function postPolicy() {
                         "field_source": "ethereum_transaction",
                         "field": "value",
                         "operator": "lte",
-                        "value": "10000000000000000"
+                        "value": "900000000000000000"
                     }
                 ],
                 "action": "ALLOW"
