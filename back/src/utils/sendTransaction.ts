@@ -33,6 +33,8 @@ export default async function sendEthTransaction(walletId: string, transaction: 
   const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
 
   console.log("transaction value: ", transaction.value);
+  const valueInWei = "0x" + (transaction.value * 1e18).toString(16);
+
 
   const requestBody = {
     method: "eth_sendTransaction",
@@ -40,8 +42,7 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     params: {
       transaction: {
         to: transaction.to,
-        value: transaction.value,
-        chain_id: 421614  // Adding chain_id as specified in docs
+        value: valueInWei,
       }
     }
   };
