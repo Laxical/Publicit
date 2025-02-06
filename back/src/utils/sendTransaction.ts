@@ -43,7 +43,7 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     params: {
       transaction: {
         to: transaction.to,
-        value: 11000000000000000,
+        value: 10000000000000000,
         chain_id: 421614
       }
     }

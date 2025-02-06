@@ -10,8 +10,10 @@ import createWallet from "./utils/createWallet";
 import sendTransaction from "./utils/sendTransaction";
 import axios from "axios";
 import * as fs from 'fs';
+import multer from "multer";
+import FormData from "form-data";
 
-
+const upload = multer();
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
 
@@ -89,7 +91,7 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
 
 app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { companyName, product, productUrl } = req.body;
+    const { companyName, product, productUrl, imageUrl } = req.body;
     let company = await Company.findOne({ companyName });
     if (!company) {
       return res.status(404).json("company not found");
@@ -111,7 +113,7 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
     const { id, address } = wallet;
     console.log("Wallet created:", id, address, companyName, product, productUrl);
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds });
+      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl });
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });

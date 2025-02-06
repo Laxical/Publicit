@@ -21,6 +21,8 @@ const cors_1 = __importDefault(require("cors"));
 const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
+const multer_1 = __importDefault(require("multer"));
+const upload = (0, multer_1.default)();
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
 const db = mongoose_1.default.connection;
@@ -73,7 +75,7 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
 }));
 app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { companyName, product, productUrl } = req.body;
+        const { companyName, product, productUrl, imageUrl } = req.body;
         let company = yield companyschema_1.default.findOne({ companyName });
         if (!company) {
             return res.status(404).json("company not found");
@@ -93,7 +95,7 @@ app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, f
         const { id, address } = wallet;
         console.log("Wallet created:", id, address, companyName, product, productUrl);
         if (company && company.products) {
-            company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds });
+            company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl });
             yield company.save();
         }
         return res.status(200).json({ message: "Wallet created successfully!" });

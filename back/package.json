@@ -23,6 +23,7 @@
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
+    "@types/multer": "^1.4.12",
     "tsx": "^4.19.2",
     "typescript": "^5.7.3"
   },
@@ -34,7 +35,9 @@
     "express": "^4.21.2",
     "https": "^1.0.0",
     "mongoose": "^8.9.7",
+    "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.9",
+    "pinata-web3": "^0.5.4",
     "viem": "^2.22.22"
   }
 }

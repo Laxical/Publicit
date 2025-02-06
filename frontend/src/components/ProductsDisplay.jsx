@@ -21,7 +21,7 @@ function ProductDisplay() {
   };
 
   const generateSnippet = (productName, productData) => {
-    return `<script async src="http://localhost:3000/advertisement.js" data-ad-image="https://images.panda.org/assets/images/pages/welcome/orangutan_1600x1000_279157.jpg" data-ad-width="400px" data-ad-height="350px" data-ad-id="${companyName}" redirect-url="${productData.productUrl}" product="${productName}"></script>`;
+    return `<script async src="http://localhost:3000/advertisement.js" data-ad-image="${productData.imageUrl}" data-ad-width="400px" data-ad-height="350px" data-ad-id="${companyName}" redirect-url="${productData.productUrl}" product="${productName}"></script>`;
   };
 
   const copyToClipboard = (text) => {

@@ -20,6 +20,7 @@
     const adHeight = scriptTag.getAttribute("data-ad-height") || "250px";
     const companyName = scriptTag.getAttribute("data-ad-id");
     const redirectUrl = scriptTag.getAttribute("redirect-url");
+    const imageUrl = scriptTag.getAttribute("image-url");
     const product = scriptTag.getAttribute("product");
 
     let adContainer = document.createElement("div");

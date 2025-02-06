@@ -6,11 +6,14 @@ function AddProduct() {
   const [productName, setProductName] = useState("")
   const [productUrl, setProductUrl] = useState("")
   const [message, setMessage] = useState("")
+  const [file, setFile] = useState(null)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    console.log("here");
     try {
-      const response = await axios.post("http://localhost:3000/api/create-wallet", { companyName, product: productName, productUrl })
+      const imageUrl = await handleImageUpload();
+      const response = await axios.post("http://localhost:3000/api/create-wallet", { companyName, product: productName, productUrl, imageUrl })
       setMessage(response.data.message)
       if (response.data.walletAddress) {
         setCompanyName("")
@@ -20,6 +23,28 @@ function AddProduct() {
       setMessage(error.response?.data?.error || "An error occurred")
     }
   }
+
+  const handleImageUpload = async () => {
+    const uploadPreset = 'hackathonform';
+    const cloudName = 'dgjqg72wo';
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', uploadPreset);
+
+    try {
+      const response = await axios.post(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, formData,{
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        withCredentials: false,
+      });
+      return response.data.secure_url;
+    } catch (error) {
+      console.error('Error uploading file:', error.response ? error.response.data : error.message);
+      return null;
+    }
+  };
+
 
   return (
     <div>
@@ -61,6 +86,18 @@ function AddProduct() {
             value={productUrl}
             onChange={(e) => setProductUrl(e.target.value)}
             required
+            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+          />
+        </div>
+        <div>
+          <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700">
+            Upload Image
+          </label>
+          <input
+            type="file"
+            id="imageUpload"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files[0])}
             className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
           />
         </div>
