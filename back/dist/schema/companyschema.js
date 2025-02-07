@@ -9,6 +9,7 @@ const companySchema = new mongoose_1.default.Schema({
     products: {
         type: Map,
         of: {
+            walletAddress: { type: String, required: true },
             imageUrl: { type: String, required: true },
             productUrl: { type: String, required: true },
             walletUniqueId: { type: String, required: true },

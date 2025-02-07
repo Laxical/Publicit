@@ -14,6 +14,7 @@
     "@radix-ui/react-avatar": "^1.1.3",
     "@radix-ui/react-label": "^2.1.2",
     "@radix-ui/react-slot": "^1.1.2",
+    "@radix-ui/react-tooltip": "^1.1.8",
     "@tailwindcss/vite": "^4.0.3",
     "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
@@ -27,6 +28,7 @@
     "react-router-dom": "^7.1.5",
     "tailwind-merge": "^3.0.1",
     "tailwindcss-animate": "^1.0.7",
+    "tooltip": "^1.6.1",
     "viem": "^2.22.17"
   },
   "devDependencies": {

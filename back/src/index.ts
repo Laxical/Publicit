@@ -113,7 +113,7 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
     const { id, address } = wallet;
     console.log("Wallet created:", id, address, companyName, product, productUrl);
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl });
+      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl, walletAddress: address });
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });
@@ -155,17 +155,49 @@ app.get("/api/get-products/:companyName", async (req: Request, res: Response): P
 
     console.log(companyName);
 
-    let company = await Company.findOne({ companyName });
+    let company = await Company.findOne({ companyName }).lean();
     if (!company) {
-      return res.status(400).json({ message: "Company doesn't exists" });
+      return res.status(400).json({ message: "Company doesn't exist" });
     }
 
-    return res.status(201).json({ message: "Products fetched succesfully!", company });
+    const filteredProducts: Record<string, any> = {};
+    if (company.products) {
+      for (const [key, product] of Object.entries(company.products)) {
+        const { walletUniqueId, policyId, ...filteredProduct } = product;
+        filteredProducts[key] = filteredProduct;
+      }
+    }
+
+    return res.status(200).json({ 
+      message: "Products fetched successfully!", 
+      company: { ...company, products: filteredProducts } 
+    });
   } catch (error) {
-    console.error("Error creating company:", error);
-    return res.status(500).json({ error: "Failed to create company" });
+    console.error("Error fetching products:", error);
+    return res.status(500).json({ error: "Failed to fetch products" });
   }
-})
+});
+
+app.get("/api/get-balance/:walletAddress", async (req: Request, res: Response): Promise<any> => {
+  try {
+      const { walletAddress } = req.params;
+      const url = `https://api-sepolia.arbiscan.io/api?module=account&action=balance&address=${walletAddress}&tag=latest&apikey=${process.env.ARBISCAN_API_KEY}`;
+
+      const response = await axios.get(url);
+      const data = response.data;
+
+      if (data.status !== "1") {
+          return res.status(400).json({ error: "Failed to fetch balance" });
+      }
+
+      const balanceInEth = (parseFloat(data.result) / 1e18).toString();
+
+      return res.status(200).json({ address: walletAddress, balance: balanceInEth });
+  } catch (error) {
+      console.error("Error fetching balance:", error);
+      return res.status(500).json({ error: "Failed to fetch balance" });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
