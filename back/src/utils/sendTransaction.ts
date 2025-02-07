@@ -7,11 +7,11 @@ dotenv.config();
 // Replace this with your private key from the Dashboard
 const PRIVY_AUTHORIZATION_KEY = process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY;
 
-function getAuthorizationSignature({url, body, idempotencyKey}: {url: string; body: object, idempotencyKey: string}) {
+function getAuthorizationSignature({url, body, method, idempotencyKey}: {url: string; body: object, method:string, idempotencyKey: string}) {
 
   const payload = {
     version: 1,
-    method: 'POST',
+    method: method,
     url,
     body,
     headers: {
