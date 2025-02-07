@@ -80,9 +80,9 @@ export default function AddProduct() {
       <div className="container max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Card className="w-full shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-3xl font-bold tracking-tight text-center">Add Your Product</CardTitle>
+            <CardTitle className="text-3xl font-bold tracking-tight text-center">Add campaign</CardTitle>
             <CardDescription className="text-center text-gray-500 dark:text-gray-400">
-              Fill in the details below to add your product to our marketplace.
+              Fill in the details below to add your campaign to our marketplace.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -101,7 +101,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="productName">Product Name</Label>
+                <Label htmlFor="productName">campaign Name</Label>
                 <Input
                   type="text"
                   id="productName"
@@ -114,7 +114,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="productUrl">Product URL</Label>
+                <Label htmlFor="productUrl">campaign URL</Label>
                 <Input
                   type="url"
                   id="productUrl"
@@ -127,7 +127,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="imageUpload">Product Image</Label>
+                <Label htmlFor="imageUpload">campaign Image</Label>
                 <div className="mt-1 flex items-center gap-4">
                   <Input
                     type="file"
@@ -148,10 +148,10 @@ export default function AddProduct() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Adding Product...
+                    Adding campaign...
                   </>
                 ) : (
-                  "Add Product"
+                  "Add campaign"
                 )}
               </Button>
             </form>
