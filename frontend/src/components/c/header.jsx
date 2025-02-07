@@ -14,10 +14,10 @@ export function Header() {
           Register Company
           </a>
           <a className="text-sm font-medium hover:underline underline-offset-4" href="/add-product">
-          Add Product
+          Add Campaign
           </a>
           <a className="text-sm font-medium hover:underline underline-offset-4" href="/product-display">
-          Product Display
+          Campaign Display
           </a>
         </nav>
         <div className="ml-4">

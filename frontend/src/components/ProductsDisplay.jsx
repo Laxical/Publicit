@@ -148,9 +148,9 @@ export default AdComponent;`
       <div className="container max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <Card className="w-full shadow-lg">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-3xl font-bold tracking-tight text-center">Product Display</CardTitle>
+            <CardTitle className="text-3xl font-bold tracking-tight text-center">Campaign Display</CardTitle>
             <CardDescription className="text-center text-gray-500 dark:text-gray-400">
-              Enter your company name to view product snippets.
+              Enter your company name to view campaign snippets.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -176,7 +176,7 @@ export default AdComponent;`
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Fetching Products...
+                    Fetching Campaigns...
                   </>
                 ) : (
                   "Submit"

@@ -12,7 +12,6 @@ const companySchema = new mongoose.Schema({
       policyId:{type:String,required:true},
       userReward:{type:Number,required:true},
       websiteCommission:{type:Number,required:true},
-      
     },
   },
 });
