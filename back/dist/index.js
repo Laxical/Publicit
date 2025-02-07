@@ -74,10 +74,11 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(400).json({ error: "Redirect URL does not match the product URL" });
             return;
         }
+        const userAdKey = `${userAddress}-${productData.walletUniqueId}`;
         yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
             to: userAddress,
             value: 10000000000000000
-        });
+        }, userAdKey);
         console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
         res.json({ message: "Click tracked, incentive processed.", user: userAddress });
     }

@@ -17,8 +17,7 @@ function getAuthorizationSignature({ url, body }) {
         url,
         body,
         headers: {
-            'privy-app-id': process.env.PRIVY_APP_ID
-            // If your request includes an idempotency key, include that header here as well
+            'privy-app-id': process.env.PRIVY_APP_ID,
         }
     };
     // JSON-canonicalize the payload and convert it to a buffer
