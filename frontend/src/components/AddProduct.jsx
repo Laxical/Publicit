@@ -89,6 +89,9 @@ export default function AddProduct() {
             <CardDescription className="text-center text-gray-500 dark:text-gray-400">
               Fill in the details below to add your campaign to our marketplace.
             </CardDescription>
+            <CardDescription className="text-center text-gray-500 dark:text-gray-400">
+              (Users will be able to get incentives only once in 24 hours for every unique campaign they click.)
+            </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
@@ -132,7 +135,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="websiteCommission">website commission</Label>
+                <Label htmlFor="websiteCommission">website commission (in %)</Label>
                 <Input
                   type="text"
                   id="=websiteCommission"
@@ -143,10 +146,6 @@ export default function AddProduct() {
                   className="w-full"
                 />
               </div>
-
-
-
-
 
               <div className="space-y-2">
                 <Label htmlFor="productUrl">campaign URL</Label>

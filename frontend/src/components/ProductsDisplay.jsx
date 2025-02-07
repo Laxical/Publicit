@@ -108,6 +108,7 @@ export default function ProductDisplay() {
   data-ad-id="${companyName}" 
   redirect-url="${productData.productUrl}" 
   product="${productName}"
+  website-wallet-address="<website's-wallet-address>"
 >
 </script>`
 
@@ -131,6 +132,7 @@ const AdComponent = () => {
       script.setAttribute("data-ad-id", "${companyName}");
       script.setAttribute("redirect-url", "${productData.productUrl}");
       script.setAttribute("product", "${productName}");
+      script.setAttribute("website-wallet-address", "<website's-wallet-address>");
 
       adRef.current.appendChild(script);
   }, []);

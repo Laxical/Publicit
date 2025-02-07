@@ -19,6 +19,9 @@ export function Header() {
           <a className="text-sm font-medium hover:underline underline-offset-4" href="/product-display">
           Campaign Display
           </a>
+          <a className="text-sm font-medium hover:underline underline-offset-4" href="/campaigns">
+          Search Campaigns
+          </a>
         </nav>
         <div className="ml-4">
           <Button asChild variant="outline" className="border-2 border-black">

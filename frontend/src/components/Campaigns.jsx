@@ -118,6 +118,7 @@ export default AdComponent;`;
             <div className="p-4">
                 <div><span className="font-bold">User incentives:</span> {productData.userReward}</div>
                 <div><span className="font-bold">Website commision:</span> {productData.websiteCommission}</div>
+                <div><span className="font-bold">Campaign Url:</span> {productData.productUrl}</div>
             </div>
         </div>
         <Button
