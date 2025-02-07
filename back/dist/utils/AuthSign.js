@@ -10,10 +10,10 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 // Replace this with your private key from the Dashboard
 const PRIVY_AUTHORIZATION_KEY = process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY;
-function getAuthorizationSignature({ url, body }) {
+function getAuthorizationSignature({ url, body, method }) {
     const payload = {
         version: 1,
-        method: 'POST',
+        method: method,
         url,
         body,
         headers: {

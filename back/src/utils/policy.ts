@@ -40,11 +40,12 @@ export default async function postPolicy() {
       };
 
     // Prepare headers
+    const method='POST'
     const headers = {
         'privy-app-id': privyAppId,
         'Content-Type': 'application/json',
         'Authorization': authHeader,
-        'privy-authorization-signature': getAuthorizationSignature({url, body: policyData})
+        'privy-authorization-signature': getAuthorizationSignature({url, body: policyData,method})
     };
 
     try {

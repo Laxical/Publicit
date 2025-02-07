@@ -5,11 +5,11 @@ dotenv.config();
 // Replace this with your private key from the Dashboard
 const PRIVY_AUTHORIZATION_KEY = process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY;
 
-export default function getAuthorizationSignature({url, body}: {url: string; body: object}) {
+export default function getAuthorizationSignature({url, body,method}: {url: string; body: object,method:string}) {
 
   const payload = {
     version: 1,
-    method: 'POST',
+    method: method,
     url,
     body,
     headers: {

@@ -12,6 +12,7 @@ import axios from "axios";
 import * as fs from 'fs';
 import multer from "multer";
 import FormData from "form-data";
+import updatePolicy from "./utils/updatePolicy";
 
 const upload = multer();
 dotenv.config();
@@ -200,7 +201,17 @@ app.get("/api/get-balance/:walletAddress", async (req: Request, res: Response): 
       return res.status(500).json({ error: "Failed to fetch balance" });
   }
 });
+app.patch("/api/update-policy",async(req: Request, res: Response): Promise<any>=>{
+  try{
+const {policyId}=req.body;
+await updatePolicy(policyId);
+return res.status(200).json("updated successfully")}catch(error){
+  console.log("error",error);
+} 
 
+
+
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

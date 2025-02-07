@@ -49,11 +49,12 @@ function postPolicy() {
             "default_action": "DENY"
         };
         // Prepare headers
+        const method = 'POST';
         const headers = {
             'privy-app-id': privyAppId,
             'Content-Type': 'application/json',
             'Authorization': authHeader,
-            'privy-authorization-signature': (0, AuthSign_1.default)({ url, body: policyData })
+            'privy-authorization-signature': (0, AuthSign_1.default)({ url, body: policyData, method })
         };
         try {
             // Send the POST request

@@ -85,6 +85,7 @@ function sendEthTransaction(walletId, transaction, idempotencyKey) {
         catch (error) {
             console.log(error);
         }
+        const method = 'POST';
         const headers = {
             'privy-app-id': privyAppId,
             'Content-Type': 'application/json',
@@ -92,6 +93,7 @@ function sendEthTransaction(walletId, transaction, idempotencyKey) {
             'privy-authorization-signature': getAuthorizationSignature({
                 url,
                 body: requestBody,
+                method,
                 idempotencyKey
             }),
             'privy-idempotency-key': idempotencyKey

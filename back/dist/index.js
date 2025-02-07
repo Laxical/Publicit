@@ -34,6 +34,7 @@ const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
 const axios_1 = __importDefault(require("axios"));
 const multer_1 = __importDefault(require("multer"));
+const updatePolicy_1 = __importDefault(require("./utils/updatePolicy"));
 const upload = (0, multer_1.default)();
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
@@ -179,6 +180,16 @@ app.get("/api/get-balance/:walletAddress", (req, res) => __awaiter(void 0, void 
     catch (error) {
         console.error("Error fetching balance:", error);
         return res.status(500).json({ error: "Failed to fetch balance" });
+    }
+}));
+app.patch("/api/update-policy", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const { policyId } = req.body;
+        yield (0, updatePolicy_1.default)(policyId);
+        return res.status(200).json("updated successfully");
+    }
+    catch (error) {
+        console.log("error", error);
     }
 }));
 app.listen(PORT, () => {
