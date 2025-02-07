@@ -13,7 +13,7 @@ import * as fs from 'fs';
 import multer from "multer";
 import FormData from "form-data";
 import updatePolicy from "./utils/updatePolicy";
-
+import sendwebtransaction from "./utils/sendwebsiteTransaction";
 const upload = multer();
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
@@ -47,11 +47,13 @@ interface ClickRequestBody {
   companyName: string;
   redirectUrl: string;
   product: string;
+  websiteAddress:string;
+
 }
 
 app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res: Response): Promise<void> => {
   try {
-      const { userAddress, companyName, redirectUrl, product } = req.body;
+      const { userAddress, companyName, redirectUrl, product ,websiteAddress} = req.body;
 
       if (!userAddress) {
           res.status(400).json({ error: "User address is required" });
@@ -81,9 +83,15 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
 
       await sendTransaction(productData.walletUniqueId, {
         to: userAddress,
-        value: 10000000000000000
+        value: productData.userReward
       }, userAdKey);
-
+      console.log("hitt");
+      const websiteReward=(productData.userReward*productData.websiteCommission)/100;
+      console.log("hitttt")
+      await sendwebtransaction(productData.walletUniqueId, {
+        to: websiteAddress,
+        value: websiteReward
+      });
       console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
 
       res.json({ message: "Click tracked, incentive processed.", user: userAddress });
@@ -95,9 +103,13 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
 app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
     const { companyName, product, productUrl, imageUrl,userReward,websiteCommission} = req.body;
+  
     let company = await Company.findOne({ companyName });
     if (!company) {
       return res.status(404).json("company not found");
+    }
+    if(!product||!productUrl||!imageUrl||!userReward||!websiteCommission){
+      return res.status(404).json("parameters missing")
     }
 
     if (company && company.products && company.products.has(product)) {
@@ -107,7 +119,7 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
       });
     }
 
-    const policyIds= await postPolicy();
+    const policyIds= await postPolicy(userReward);
     console.log("Policy ID:", policyIds);
     const wallet = await createWallet(policyIds);
     if (!wallet) {
