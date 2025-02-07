@@ -92,7 +92,7 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
 
 app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any> => {
   try {
-    const { companyName, product, productUrl, imageUrl } = req.body;
+    const { companyName, product, productUrl, imageUrl,userReward,websiteCommission} = req.body;
     let company = await Company.findOne({ companyName });
     if (!company) {
       return res.status(404).json("company not found");
@@ -114,7 +114,7 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
     const { id, address } = wallet;
     console.log("Wallet created:", id, address, companyName, product, productUrl);
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl, walletAddress: address });
+      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl, walletAddress: address,userReward,websiteCommission});
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });

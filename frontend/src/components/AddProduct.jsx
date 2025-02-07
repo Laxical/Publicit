@@ -17,7 +17,8 @@ export default function AddProduct() {
   const [message, setMessage] = useState("")
   const [file, setFile] = useState(null)
   const [userReward,setUserReward]=useState(0);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [websiteCommission,setWebsiteCommission]=useState(0);
   const [error, setError] = useState("")
 
   const handleSubmit = async (e) => {
@@ -33,7 +34,8 @@ export default function AddProduct() {
         product: productName,
         productUrl,
         imageUrl,
-        userReward
+        userReward,
+        websiteCommission
       })
       setMessage(response.data.message)
       if (response.data.walletAddress) {
@@ -121,10 +123,23 @@ export default function AddProduct() {
                 <Input
                   type="text"
                   id="=userReward"
-                  value={companyName}
+                  value={userReward}
                   onChange={(e) => setUserReward(e.target.value)}
                   required
                   placeholder="Enter Maximum User Reward"
+                  className="w-full"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="websiteCommission">website commission</Label>
+                <Input
+                  type="text"
+                  id="=websiteCommission"
+                  value={websiteCommission}
+                  onChange={(e) => setWebsiteCommission(e.target.value)}
+                  required
+                  placeholder="Enter website commission"
                   className="w-full"
                 />
               </div>

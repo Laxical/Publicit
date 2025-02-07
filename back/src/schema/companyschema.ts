@@ -9,7 +9,10 @@ const companySchema = new mongoose.Schema({
       imageUrl: { type: String, required: true },
       productUrl: { type: String, required: true },
       walletUniqueId: { type: String, required: true },
-      policyId:{type:String,required:false}
+      policyId:{type:String,required:true},
+      userReward:{type:Number,required:true},
+      websiteCommission:{type:Number,required:true},
+      
     },
   },
 });

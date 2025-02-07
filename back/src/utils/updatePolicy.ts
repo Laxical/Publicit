@@ -43,21 +43,6 @@ export default async function updatePolicy(policyId: string) {
     // Policy update data matching the curl example
     const updateData: UpdatePolicyData = {
         "method_rules": [{
-            "method": "eth_sendTransaction",
-            "rules": [{
-                "name": "Restrict ETH transfers to a maximum value",
-                "conditions": [
-                    {
-                        "field_source": "ethereum_transaction",
-                        "field": "value",
-                        "operator": "lte",
-                        "value": "10000000000000000"
-                    }
-                ],
-                "action": "ALLOW"
-            }]
-        },
-        {
           "method": "eth_sendTransaction",
           "rules": [{
             "name": "Allowlist USDT",
