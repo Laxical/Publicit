@@ -17,7 +17,8 @@ const axios_1 = __importDefault(require("axios"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const AuthSign_1 = __importDefault(require("./AuthSign"));
 dotenv_1.default.config();
-function postPolicy() {
+const viem_1 = require("viem");
+function postPolicy(userReward) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log("Creating policy...");
         const privyAppId = process.env.PRIVY_APP_ID;
@@ -26,6 +27,9 @@ function postPolicy() {
         // Base64 encode for basic authentication
         const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
         const url = 'https://api.privy.io/v1/policies';
+        const value = (0, viem_1.parseEther)(String(userReward));
+        console.log(value);
+        // 10000000000000000n
         // Read policy from file
         const policyData = {
             "version": "1.0",
@@ -40,7 +44,7 @@ function postPolicy() {
                                     "field_source": "ethereum_transaction",
                                     "field": "value",
                                     "operator": "lte",
-                                    "value": "10000000000000000"
+                                    "value": `${value}`
                                 }
                             ],
                             "action": "ALLOW"

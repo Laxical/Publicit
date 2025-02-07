@@ -17,6 +17,7 @@ const axios_1 = __importDefault(require("axios"));
 const canonicalize_1 = __importDefault(require("canonicalize"));
 const crypto_1 = __importDefault(require("crypto"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const viem_1 = require("viem");
 dotenv_1.default.config();
 // Replace this with your private key from the Dashboard
 const PRIVY_AUTHORIZATION_KEY = process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY;
@@ -49,7 +50,6 @@ function getAuthorizationSignature({ url, body, method, idempotencyKey }) {
     console.log(signature);
     return signature;
 }
-dotenv_1.default.config();
 function sendEthTransaction(walletId, transaction, idempotencyKey) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
@@ -66,6 +66,9 @@ function sendEthTransaction(walletId, transaction, idempotencyKey) {
         console.log("transaction value: ", transaction.value);
         console.log("To Address: ", transaction.to);
         console.log("wallet Id: ", walletId);
+        const value = (0, viem_1.parseEther)(String(transaction.value));
+        console.log(value);
+        const hexValue = `0x${value.toString(16)}`;
         const requestBody = {
             chain_type: "ethereum",
             method: "eth_sendTransaction",
@@ -74,7 +77,7 @@ function sendEthTransaction(walletId, transaction, idempotencyKey) {
             params: {
                 transaction: {
                     to: transaction.to,
-                    value: 10000000000000000,
+                    value: hexValue,
                     chain_id: 421614
                 }
             }

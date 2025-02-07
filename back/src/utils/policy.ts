@@ -3,9 +3,9 @@ import * as fs from "fs";
 import dotenv from 'dotenv';
 import getAuthorizationSignature from "./AuthSign";
 dotenv.config();
+import { parseEther } from 'viem'
 
-
-export default async function postPolicy() {
+export default async function postPolicy(userReward:Number) {
     console.log("Creating policy...");
     const privyAppId = process.env.PRIVY_APP_ID;
     const privyAppSecret = process.env.PRIVY_APP_SECRET;
@@ -15,9 +15,11 @@ export default async function postPolicy() {
     const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
 
     const url = 'https://api.privy.io/v1/policies';
-
+    const value=parseEther(String(userReward));
+    console.log(value);
+    // 10000000000000000n
     // Read policy from file
-    const policyData = {
+   const policyData = {
         "version": "1.0",
         "name": "T",
         "chain_type": "ethereum",
@@ -30,14 +32,14 @@ export default async function postPolicy() {
                         "field_source": "ethereum_transaction",
                         "field": "value",
                         "operator": "lte",
-                        "value": "10000000000000000"
+                        "value": `${value}`
                     }
                 ],
                 "action": "ALLOW"
             }]
         }],
         "default_action": "DENY"
-      };
+      }; 
 
     // Prepare headers
     const method='POST'
@@ -51,6 +53,7 @@ export default async function postPolicy() {
     try {
         // Send the POST request
         const response = await axios.post(url, policyData, { headers });
+
         const policy = response.data;
 
         console.log('Policy created successfully!');
