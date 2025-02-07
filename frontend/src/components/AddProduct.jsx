@@ -16,6 +16,7 @@ export default function AddProduct() {
   const [productUrl, setProductUrl] = useState("")
   const [message, setMessage] = useState("")
   const [file, setFile] = useState(null)
+  const [userReward,setUserReward]=useState(0);
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
 
@@ -32,6 +33,7 @@ export default function AddProduct() {
         product: productName,
         productUrl,
         imageUrl,
+        userReward
       })
       setMessage(response.data.message)
       if (response.data.walletAddress) {
@@ -39,6 +41,7 @@ export default function AddProduct() {
         setProductName("")
         setProductUrl("")
         setFile(null)
+        setUserReward(0);
       }
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred while adding the product.")
@@ -112,6 +115,23 @@ export default function AddProduct() {
                   className="w-full"
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="UserReward">User Reward</Label>
+                <Input
+                  type="text"
+                  id="=userReward"
+                  value={companyName}
+                  onChange={(e) => setUserReward(e.target.value)}
+                  required
+                  placeholder="Enter Maximum User Reward"
+                  className="w-full"
+                />
+              </div>
+
+
+
+
 
               <div className="space-y-2">
                 <Label htmlFor="productUrl">campaign URL</Label>

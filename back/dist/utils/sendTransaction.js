@@ -50,13 +50,15 @@ function sendEthTransaction(walletId, transaction) {
         catch (error) {
             console.log(error);
         }
+        const method = 'POST';
         const headers = {
             'privy-app-id': privyAppId,
             'Content-Type': 'application/json',
             'Authorization': authHeader,
             'privy-authorization-signature': (0, AuthSign_1.default)({
                 url,
-                body: requestBody
+                body: requestBody,
+                method
             })
         };
         console.log("Header: ", headers);

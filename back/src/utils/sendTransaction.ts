@@ -54,6 +54,7 @@ export default async function sendEthTransaction(walletId: string, transaction: 
   } catch (error) {
     console.log(error);
   }
+  const method='POST'
 
   const headers = {
     'privy-app-id': privyAppId,
@@ -61,7 +62,8 @@ export default async function sendEthTransaction(walletId: string, transaction: 
     'Authorization': authHeader,
     'privy-authorization-signature': getAuthorizationSignature({
       url,
-      body: requestBody
+      body: requestBody,
+      method
     })
   };
 

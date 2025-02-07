@@ -12,6 +12,7 @@ import axios from "axios";
 import * as fs from 'fs';
 import multer from "multer";
 import FormData from "form-data";
+import updatePolicy from "./utils/updatePolicy";
 
 const upload = multer();
 dotenv.config();
@@ -166,7 +167,17 @@ app.get("/api/get-products/:companyName", async (req: Request, res: Response): P
     return res.status(500).json({ error: "Failed to create company" });
   }
 })
+app.patch("/api/update-policy",async(req: Request, res: Response): Promise<any>=>{
+  try{
+const {policyId}=req.body;
+await updatePolicy(policyId);
+return res.status(200).json("updated successfully")}catch(error){
+  console.log("error",error);
+} 
 
+
+
+})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -11,8 +11,8 @@ export default async function createWallet(policyIds: string) {
    const privyAppSecret = process.env.PRIVY_APP_SECRET;
    const url = 'https://api.privy.io/v1/wallets';
    const authHeader = 'Basic ' + Buffer.from(`${privyAppId}:${privyAppSecret}`).toString('base64');
-
-   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds], authorization_key_ids:[authorizationID]} });
+   const method='POST'
+   const signature = getAuthorizationSignature({ url, body: { chain_type: 'ethereum', policy_ids: [policyIds], authorization_key_ids:[authorizationID]} ,method});
 
    try {
       const response = await axios.post(
