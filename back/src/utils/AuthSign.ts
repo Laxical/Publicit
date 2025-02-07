@@ -13,8 +13,7 @@ export default function getAuthorizationSignature({url, body,method}: {url: stri
     url,
     body,
     headers: {
-    'privy-app-id': process.env.PRIVY_APP_ID
-    // If your request includes an idempotency key, include that header here as well
+    'privy-app-id': process.env.PRIVY_APP_ID,
     }
   };
 

@@ -76,11 +76,13 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
         res.status(400).json({ error: "Redirect URL does not match the product URL" });
         return;
       }
+
+      const userAdKey = `${userAddress}-${productData.walletUniqueId}`;
+
       await sendTransaction(productData.walletUniqueId, {
         to: userAddress,
         value: 10000000000000000
-      });
-
+      }, userAdKey);
 
       console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
 

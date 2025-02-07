@@ -14,13 +14,47 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = sendEthTransaction;
 const axios_1 = __importDefault(require("axios"));
+const canonicalize_1 = __importDefault(require("canonicalize"));
+const crypto_1 = __importDefault(require("crypto"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const AuthSign_1 = __importDefault(require("./AuthSign"));
 dotenv_1.default.config();
-function sendEthTransaction(walletId, transaction) {
+// Replace this with your private key from the Dashboard
+const PRIVY_AUTHORIZATION_KEY = process.env.PRIVY_AUTHORIZATION_PRIVATE_KEY;
+function getAuthorizationSignature({ url, body, method, idempotencyKey }) {
+    const payload = {
+        version: 1,
+        method: method,
+        url,
+        body,
+        headers: {
+            'privy-app-id': process.env.PRIVY_APP_ID,
+            'privy-idempotency-key': idempotencyKey
+        }
+    };
+    // JSON-canonicalize the payload and convert it to a buffer
+    const serializedPayload = (0, canonicalize_1.default)(payload);
+    const serializedPayloadBuffer = Buffer.from(serializedPayload);
+    // Replace this with your app's authorization key. We remove the 'wallet-auth:' prefix
+    // from the key before using it to sign requests
+    const privateKeyAsString = PRIVY_AUTHORIZATION_KEY === null || PRIVY_AUTHORIZATION_KEY === void 0 ? void 0 : PRIVY_AUTHORIZATION_KEY.replace('wallet-auth:', '');
+    // Convert your private key to PEM format, and instantiate a node crypto KeyObject for it
+    const privateKeyAsPem = `-----BEGIN PRIVATE KEY-----\n${privateKeyAsString}\n-----END PRIVATE KEY-----`;
+    const privateKey = crypto_1.default.createPrivateKey({
+        key: privateKeyAsPem,
+        format: 'pem',
+    });
+    // Sign the payload buffer with your private key and serialize the signature to a base64 string
+    const signatureBuffer = crypto_1.default.sign('sha256', serializedPayloadBuffer, privateKey);
+    const signature = signatureBuffer.toString('base64');
+    console.log(signature);
+    return signature;
+}
+dotenv_1.default.config();
+function sendEthTransaction(walletId, transaction, idempotencyKey) {
     return __awaiter(this, void 0, void 0, function* () {
         var _a;
         console.log("Starting transaction process...");
+        console.log("Idempotency-key: ", idempotencyKey);
         const privyAppId = process.env.PRIVY_APP_ID;
         const privyAppSecret = process.env.PRIVY_APP_SECRET;
         if (!privyAppId || !privyAppSecret) {
@@ -36,6 +70,7 @@ function sendEthTransaction(walletId, transaction) {
             chain_type: "ethereum",
             method: "eth_sendTransaction",
             caip2: "eip155:421614",
+            idempotencyKey: idempotencyKey,
             params: {
                 transaction: {
                     to: transaction.to,
@@ -55,11 +90,13 @@ function sendEthTransaction(walletId, transaction) {
             'privy-app-id': privyAppId,
             'Content-Type': 'application/json',
             'Authorization': authHeader,
-            'privy-authorization-signature': (0, AuthSign_1.default)({
+            'privy-authorization-signature': getAuthorizationSignature({
                 url,
                 body: requestBody,
-                method
-            })
+                method,
+                idempotencyKey
+            }),
+            'privy-idempotency-key': idempotencyKey
         };
         console.log("Header: ", headers);
         try {
