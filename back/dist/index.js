@@ -28,7 +28,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const server_auth_1 = require("@privy-io/server-auth");
 const mongoose_1 = __importDefault(require("mongoose"));
 const companyschema_1 = __importDefault(require("./schema/companyschema"));
-const cors_1 = __importDefault(require("cors"));
 const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
@@ -36,6 +35,7 @@ const axios_1 = __importDefault(require("axios"));
 const multer_1 = __importDefault(require("multer"));
 const updatePolicy_1 = __importDefault(require("./utils/updatePolicy"));
 const upload = (0, multer_1.default)();
+const allowedOrigin = process.env.FRONTEND_URL;
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
 const db = mongoose_1.default.connection;
@@ -51,8 +51,20 @@ const privy = new server_auth_1.PrivyClient(process.env.PRIVY_APP_ID || "", proc
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 app.use(express_1.default.static("public"));
+app.get("/advertisement.js", (req, res) => {
+    res.setHeader("Content-Type", "application/javascript");
+    res.sendFile(__dirname + "/public/advertisement.js");
+});
 app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -224,6 +236,12 @@ app.patch("/api/update-policy", (req, res) => __awaiter(void 0, void 0, void 0, 
         console.log("error", error);
     }
 }));
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.get("/api/test", (req, res) => {
+    res.status(200).json({
+        message: "Test route",
+    });
 });
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+module.exports = app;

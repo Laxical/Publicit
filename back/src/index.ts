@@ -14,7 +14,9 @@ import multer from "multer";
 import FormData from "form-data";
 import updatePolicy from "./utils/updatePolicy";
 import sendwebtransaction from "./utils/sendwebsiteTransaction";
+
 const upload = multer();
+const allowedOrigin = process.env.FRONTEND_URL;
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
 
@@ -39,8 +41,20 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use((req: Request, res: Response, next): any => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  next();
+});
 app.use(express.static("public"));
+app.get("/advertisement.js", (req, res) => {
+  res.setHeader("Content-Type", "application/javascript");
+  res.sendFile(__dirname + "/public/advertisement.js");
+});
 
 interface ClickRequestBody {
   userAddress: string;
@@ -236,15 +250,21 @@ app.get("/api/get-balance/:walletAddress", async (req: Request, res: Response): 
 });
 app.patch("/api/update-policy",async(req: Request, res: Response): Promise<any>=>{
   try{
-const {policyId}=req.body;
-await updatePolicy(policyId);
-return res.status(200).json("updated successfully")}catch(error){
-  console.log("error",error);
-} 
-
-
-
+    const {policyId}=req.body;
+    await updatePolicy(policyId);
+    return res.status(200).json("updated successfully")}catch(error){
+      console.log("error",error);
+    } 
 })
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+
+app.get("/api/test", (req: Request, res: Response) => {
+  res.status(200).json({
+    message: "Test route",
+  });
+})
+
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+
+module.exports = app;
