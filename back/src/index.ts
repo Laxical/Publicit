@@ -217,11 +217,12 @@ app.get("/api/get-balance/:walletAddress", async (req: Request, res: Response): 
 });
 app.patch("/api/update-policy",async(req: Request, res: Response): Promise<any>=>{
   try{
-const {policyId}=req.body;
-await updatePolicy(policyId);
-return res.status(200).json("updated successfully")}catch(error){
-  console.log("error",error);
-} 
+    const {policyId}=req.body;
+    await updatePolicy(policyId);
+    return res.status(200).json("updated successfully")}catch(error){
+      console.log("error",error);
+    } 
+})
 
 app.get("/api/test", (req: Request, res: Response) => {
   res.status(200).json({
@@ -229,7 +230,6 @@ app.get("/api/test", (req: Request, res: Response) => {
   });
 })
 
-})
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
