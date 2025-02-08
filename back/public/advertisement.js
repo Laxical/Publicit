@@ -22,6 +22,7 @@
     const redirectUrl = scriptTag.getAttribute("redirect-url");
     const imageUrl = scriptTag.getAttribute("image-url");
     const product = scriptTag.getAttribute("product");
+    const websiteAddress = scriptTag.getAttribute("website-wallet-address");
 
     let adContainer = document.createElement("div");
     adContainer.style.display = "flex";
@@ -48,7 +49,7 @@
         fetch("http://localhost:3000/api/track-click", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ userAddress, companyName, redirectUrl, product })
+            body: JSON.stringify({ userAddress, companyName, redirectUrl, product, websiteAddress })
         }).then(response => response.json())
           .then(data => console.log("Click Tracked", data))
           .catch(error => console.error("Error tracking click:", error));

@@ -53,8 +53,8 @@ interface ClickRequestBody {
 
 app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res: Response): Promise<void> => {
   try {
-      const { userAddress, companyName, redirectUrl, product ,websiteAddress} = req.body;
-
+      const { userAddress, companyName, redirectUrl, product, websiteAddress} = req.body;
+      console.log("website address: ", websiteAddress);
       if (!userAddress) {
           res.status(400).json({ error: "User address is required" });
           return;
@@ -88,10 +88,12 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
       console.log("hitt");
       const websiteReward=(productData.userReward*productData.websiteCommission)/100;
       console.log("hitttt")
-      await sendwebtransaction(productData.walletUniqueId, {
+      const webAdKey = `${websiteAddress}-${userAddress}-${productData.walletUniqueId}`;
+
+      await sendTransaction(productData.walletUniqueId, {
         to: websiteAddress,
         value: websiteReward
-      });
+      },webAdKey);
       console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
 
       res.json({ message: "Click tracked, incentive processed.", user: userAddress });

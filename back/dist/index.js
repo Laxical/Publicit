@@ -35,7 +35,6 @@ const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
 const axios_1 = __importDefault(require("axios"));
 const multer_1 = __importDefault(require("multer"));
 const updatePolicy_1 = __importDefault(require("./utils/updatePolicy"));
-const sendwebsiteTransaction_1 = __importDefault(require("./utils/sendwebsiteTransaction"));
 const upload = (0, multer_1.default)();
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
@@ -58,6 +57,7 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
     var _a;
     try {
         const { userAddress, companyName, redirectUrl, product, websiteAddress } = req.body;
+        console.log("website address: ", websiteAddress);
         if (!userAddress) {
             res.status(400).json({ error: "User address is required" });
             return;
@@ -84,10 +84,11 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
         console.log("hitt");
         const websiteReward = (productData.userReward * productData.websiteCommission) / 100;
         console.log("hitttt");
-        yield (0, sendwebsiteTransaction_1.default)(productData.walletUniqueId, {
+        const webAdKey = `${websiteAddress}-${userAddress}-${productData.walletUniqueId}`;
+        yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
             to: websiteAddress,
             value: websiteReward
-        });
+        }, webAdKey);
         console.log(`User ${userAddress} clicked on ad (ID: ${companyName}, Product: ${product}, URL: ${redirectUrl}).`);
         res.json({ message: "Click tracked, incentive processed.", user: userAddress });
     }
