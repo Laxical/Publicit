@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -14,6 +14,10 @@ export default function CompanyRegistration() {
   const [message, setMessage] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState("")
+
+  useEffect(() => {
+    console.log(backendapi);
+  },[])
 
   const handleSubmit = async (e) => {
     e.preventDefault()
