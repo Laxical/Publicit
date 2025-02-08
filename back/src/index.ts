@@ -14,6 +14,7 @@ import multer from "multer";
 import FormData from "form-data";
 import updatePolicy from "./utils/updatePolicy";
 import sendwebtransaction from "./utils/sendwebsiteTransaction";
+
 const upload = multer();
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
@@ -233,3 +234,5 @@ app.get("/api/test", (req: Request, res: Response) => {
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+module.exports = app;

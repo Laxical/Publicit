@@ -49,7 +49,7 @@ const privy = new server_auth_1.PrivyClient(process.env.PRIVY_APP_ID || "", proc
     },
 });
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use(express_1.default.static("public"));
@@ -204,6 +204,12 @@ app.patch("/api/update-policy", (req, res) => __awaiter(void 0, void 0, void 0, 
         console.log("error", error);
     }
 }));
-app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+app.get("/api/test", (req, res) => {
+    res.status(200).json({
+        message: "Test route",
+    });
 });
+// app.listen(PORT, () => {
+//   console.log(`Server is running on http://localhost:${PORT}`);
+// });
+module.exports = app;
