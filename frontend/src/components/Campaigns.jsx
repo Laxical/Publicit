@@ -72,94 +72,110 @@ export default AdComponent;`;
   const { htmlSnippet, reactSnippet } = generateSnippet(productName, productData);
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
-          <span className="text-3xl mb-2 sm:mb-0">{productName}</span>
-          <div className="text-sm font-normal flex flex-col sm:items-end">
-            <div className="space-y-2">
-              <div className="flex flex-col">
-                <div className="flex items-center mb-1">
-                  <span className="mr-2 font-semibold">User Reward Wallet:</span>
-                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-                    {productData.userwalletAddress.slice(0, 6)}...{productData.userwalletAddress.slice(-4)}
-                  </code>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="ml-2"
-                          onClick={() => copyToClipboard(productData.userwalletAddress, "User wallet address copied!")}
-                        >
-                          <Copy className="h-4 w-4" />
-                          <span className="sr-only">Copy user wallet address</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copy user wallet address</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="flex items-center ml-4">
-                  <span className="mr-2 font-semibold">Balance:</span>
-                  <span className="font-medium">{balance !== undefined ? `${balance} ETH` : "Loading..."}</span>
-                </div>
-              </div>
-
-              <div className="flex flex-col">
-                <div className="flex items-center mb-1">
-                  <span className="mr-2 font-semibold">Commission Address:</span>
-                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-                    {productData.CommissionAddress.slice(0, 6)}...{productData.CommissionAddress.slice(-4)}
-                  </code>
-                  <TooltipProvider>
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="ml-2"
-                          onClick={() => copyToClipboard(productData.CommissionAddress, "Commission address copied!")}
-                        >
-                          <Copy className="h-4 w-4" />
-                          <span className="sr-only">Copy commission address</span>
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Copy commission address</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  </TooltipProvider>
-                </div>
-                <div className="flex items-center ml-4">
-                  <span className="mr-2 font-semibold">Balance:</span>
-                  <span className="font-medium">{commissionBalance !== undefined ? `${commissionBalance} ETH` : "Loading..."}</span>
-                </div>
-              </div>
-            </div>
+        <CardTitle className="space-y-4">
+          <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
+            <h3 className="text-2xl font-bold">{productName}</h3>
+       
           </div>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="mb-4 flex">
+      <CardContent className="space-y-6">
+        <div className="flex flex-col lg:flex-row gap-4 ">
           <img
             src={productData.imageUrl || "/placeholder.svg"}
             alt={productName}
-            className="rounded-md w-full h-auto"
+            className="rounded-lg w-full h-auto object-cover"
             style={{ maxWidth: "400px", maxHeight: "350px" }}
           />
-          <div className="p-4">
-            <div><span className="font-bold">User incentives:</span> {productData.userReward}</div>
-            <div><span className="font-bold">Website commision:</span> {productData.websiteCommission}</div>
-            <div><span className="font-bold">Campaign Url:</span> {productData.productUrl}</div>
+          <div className="space">
+            <div className="grid grid-cols-1 gap">
+              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <span className="font-bold">User incentives:</span> {productData.userReward}
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <span className="font-bold">Website commission:</span> {productData.websiteCommission}
+              </div>
+              <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <span className="font-bold">Campaign URL:</span> {productData.productUrl}
+              </div>
+            </div>
           </div>
         </div>
+        <div className="space-y-4 w-full lg:w-auto">
+              {/* User Reward Wallet Section */}
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm">User Reward Wallet</span>
+                    <div className="flex items-center">
+                      <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                        {productData.userwalletAddress.slice(0, 6)}...{productData.userwalletAddress.slice(-4)}
+                      </code>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="ml-2"
+                              onClick={() => copyToClipboard(productData.userwalletAddress)}
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy user wallet address</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                  <div className="text-sm">
+                    Balance: <span className="font-medium">{balance !== undefined ? `${balance} ETH` : "Loading..."}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Commission Address Section */}
+              <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <div className="flex flex-col space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-semibold text-sm">Commission Address</span>
+                    <div className="flex items-center">
+                      <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                        {productData.CommissionAddress.slice(0, 6)}...{productData.CommissionAddress.slice(-4)}
+                      </code>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="ml-2"
+                              onClick={() => copyToClipboard(productData.CommissionAddress)}
+                            >
+                              <Copy className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Copy commission address</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </div>
+                  <div className="text-sm">
+                    Balance: <span className="font-medium">{commissionBalance !== undefined ? `${commissionBalance} ETH` : "Loading..."}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
         <Button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full mb-4 bg-green-600 hover:bg-green-700 text-white"
+          className="w-full bg-green-600 hover:bg-green-700 text-white"
         >
           {isOpen ? (
             <>
@@ -173,32 +189,37 @@ export default AdComponent;`;
             </>
           )}
         </Button>
-        {isOpen && (
-          <>
-            <h3 className="text-lg font-medium mb-2">HTML Embed:</h3>
-            <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm">
-              {htmlSnippet}
-            </pre>
-            <Button
-              onClick={() => copyToClipboard(htmlSnippet)}
-              className="mt-2 mb-4 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy HTML Snippet
-            </Button>
 
-            <h3 className="text-lg font-medium mt-4 mb-2">React Embed:</h3>
-            <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-md overflow-x-auto text-sm">
-              {reactSnippet}
-            </pre>
-            <Button
-              onClick={() => copyToClipboard(reactSnippet)}
-              className="mt-2 bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-md transition duration-200 ease-in-out transform hover:scale-105"
-            >
-              <Copy className="mr-2 h-4 w-4" />
-              Copy React Snippet
-            </Button>
-          </>
+        {isOpen && (
+          <div className="space-y-6">
+            <div>
+              <h3 className="text-lg font-medium mb-2">HTML Embed:</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm">
+                {htmlSnippet}
+              </pre>
+              <Button
+                onClick={() => copyToClipboard(htmlSnippet)}
+                className="mt-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Copy className="mr-2 h-4 w-4" />
+                Copy HTML Snippet
+              </Button>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-medium mb-2">React Embed:</h3>
+              <pre className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto text-sm">
+                {reactSnippet}
+              </pre>
+              <Button
+                onClick={() => copyToClipboard(reactSnippet)}
+                className="mt-2 bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Copy className="mr-2 h-4 w-4" />
+                Copy React Snippet
+              </Button>
+            </div>
+          </div>
         )}
       </CardContent>
     </Card>

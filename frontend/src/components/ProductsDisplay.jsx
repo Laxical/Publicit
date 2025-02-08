@@ -27,6 +27,7 @@ const ProductDisplay = () => {
     setProducts(null)
     setBalances({})
     setCommissionBalances({})
+    console.log
 
     try {
       const response = await axios.get(`${backendapi}/api/get-products/${companyName}`)
