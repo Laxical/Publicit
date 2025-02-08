@@ -61,6 +61,10 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express_1.default.static("public"));
+app.get("/advertisement.js", (req, res) => {
+    res.setHeader("Content-Type", "application/javascript");
+    res.sendFile(__dirname + "/public/advertisement.js");
+});
 app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {

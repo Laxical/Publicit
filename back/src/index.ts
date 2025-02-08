@@ -51,6 +51,10 @@ app.use((req: Request, res: Response, next): any => {
   next();
 });
 app.use(express.static("public"));
+app.get("/advertisement.js", (req, res) => {
+  res.setHeader("Content-Type", "application/javascript");
+  res.sendFile(__dirname + "/public/advertisement.js");
+});
 
 interface ClickRequestBody {
   userAddress: string;
