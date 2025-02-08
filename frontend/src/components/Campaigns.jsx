@@ -8,10 +8,10 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle, Copy, Loader2, Plus, ChevronDown, ChevronUp } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
+const backendapi=import.meta.env.VITE_BACKEND_API
 
 function CampaignCard({ productName, productData, balance, companyName, websiteAddress }) {
   const [isOpen, setIsOpen] = useState(false);
-  const backendapi=import.meta.env.VITE_BACKEND_API
 
   const generateSnippet = (productName, productData) => {
     const htmlSnippet = `<script async src="${backendapi}/advertisement.js" 
@@ -186,7 +186,7 @@ export default function Campaigns() {
     setBalances({})
 
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-products/${companyName}`)
+      const response = await axios.get(`${backendapi}/api/get-products/${companyName}`)
       setProducts(response.data.company.products)
       console.log(response.data.company.products)
     } catch (error) {
@@ -207,7 +207,7 @@ export default function Campaigns() {
 
   const getBalance = async (walletAddress, productName) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-balance/${walletAddress}`)
+      const response = await axios.get(`${backendapi}/api/get-balance/${walletAddress}`)
       setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
     } catch (error) {
       console.log(error)

@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, Backpack } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Loader2 } from 'lucide-react'
-import AdComponent from "./ads/Ad1"
+const backendapi=import.meta.env.VITE_BACKEND_API
 
 export default function CompanyRegistration() {
   const [companyName, setCompanyName] = useState("")
@@ -22,7 +22,7 @@ export default function CompanyRegistration() {
     setMessage("")
 
     try {
-      const response = await axios.post("http://localhost:3000/api/create-company", { companyName })
+      const response = await axios.post(`${backendapi}/api/create-company`, { companyName })
       setMessage(response.data.message)
       if (response.data.company) {
         setCompanyName("")
@@ -92,7 +92,6 @@ export default function CompanyRegistration() {
           </CardContent>
         </Card>
       </div>
-      <AdComponent />
     </section>
   )
 }

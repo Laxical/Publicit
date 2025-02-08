@@ -1,4 +1,6 @@
 import { useRef, useEffect } from "react";
+
+const backendapi=import.meta.env.VITE_BACKEND_API
   
   const AdComponent = () => {
       const adRef = useRef(null);
@@ -9,7 +11,7 @@ import { useRef, useEffect } from "react";
           hasRun.current = true;
   
           const script = document.createElement("script");
-          script.src = "http://localhost:3000/advertisement.js";
+          script.src = `${backendapi}/advertisement.js`;
           script.async = true;
   
           script.setAttribute("data-ad-image", "https://res.cloudinary.com/dgjqg72wo/image/upload/v1738873337/qrrmigaw3ds7qoysznxq.jpg");

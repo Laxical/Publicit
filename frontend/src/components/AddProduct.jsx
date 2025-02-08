@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +20,11 @@ export default function AddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const [websiteCommission,setWebsiteCommission]=useState(0);
   const [error, setError] = useState("")
-  const backendapi=import.meta.env.VITE_BACKEND_API
+  const backendapi=import.meta.env.VITE_BACKEND_API;
+
+  useEffect(() => {
+    console.log(import.meta.env.VITE_BACKEND_API);
+  },[]);
 
 
   const handleSubmit = async (e) => {
