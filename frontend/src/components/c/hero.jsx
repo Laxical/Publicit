@@ -10,7 +10,7 @@ export function Hero() {
         >
 Revolutionize Digital Advertising with Web3        </h1>
         <p className="max-w-[600px] mt-4 text-gray-700 md:text-xl">
-         Publicité: A Web3-powered ad platform where users earn per click, third-party websites get a commission, and advertisers gain engagement seamlessly.     </p>
+        A Web3-powered ad platform where users earn per click, third-party websites get a commission, and advertisers gain engagement seamlessly.     </p>
         <Button asChild className="mt-8" size="lg">
           <Link to="/register-company">Get Started</Link>
         </Button>
