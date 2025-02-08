@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import axios from "axios"
 import { ethers } from "ethers"
@@ -10,9 +8,8 @@ import { Label } from "@/components/ui/label"
 import { AlertCircle, Copy, Loader2, Plus } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import Image from "next/image"
 
-export default function ProductDisplay() {
+const ProductDisplay = () => {
   const [companyName, setCompanyName] = useState("")
   const [products, setProducts] = useState(null)
   const [error, setError] = useState("")
@@ -21,7 +18,7 @@ export default function ProductDisplay() {
   const [commissionBalances, setCommissionBalances] = useState({})
   const [ethAmounts, setEthAmounts] = useState({})
   const [commissionEthAmounts, setCommissionEthAmounts] = useState({})
-  const backendapi = process.env.NEXT_PUBLIC_BACKEND_API
+  const backendapi = import.meta.env.VITE_BACKEND_API
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -33,6 +30,8 @@ export default function ProductDisplay() {
 
     try {
       const response = await axios.get(`${backendapi}/api/get-products/${companyName}`)
+      console.log(backendapi);
+      console.log(response);
       setProducts(response.data.company.products)
     } catch (error) {
       console.log(error)
@@ -180,12 +179,10 @@ export default function ProductDisplay() {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="aspect-video relative overflow-hidden rounded-lg">
-                          <Image
+                          <img
                             src={productData.imageUrl || "/placeholder.svg"}
                             alt={productName}
-                            layout="fill"
-                            objectFit="cover"
-                            className="transition-transform duration-300 hover:scale-105"
+                            className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -308,3 +305,5 @@ export default function ProductDisplay() {
     </section>
   )
 }
+
+export default ProductDisplay
