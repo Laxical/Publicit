@@ -55,6 +55,8 @@ app.use(express_1.default.json());
 app.use((0, cors_1.default)({
     origin: allowedOrigin,
     credentials: true,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"]
 }));
 app.use(express_1.default.static("public"));
 app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
