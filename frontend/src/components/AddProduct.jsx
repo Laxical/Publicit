@@ -122,7 +122,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="productName">campaign Name</Label>
+                <Label htmlFor="productName">Campaign Name</Label>
                 <Input
                   type="text"
                   id="productName"
@@ -148,7 +148,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="websiteCommission">website commission (in %)</Label>
+                <Label htmlFor="websiteCommission">Website commission (in %)</Label>
                 <Input
                   type="text"
                   id="=websiteCommission"
@@ -172,7 +172,7 @@ export default function AddProduct() {
 
           
               <div className="space-y-2">
-                <Label htmlFor="productUrl">campaign URL</Label>
+                <Label htmlFor="productUrl">Campaign URL</Label>
                 <Input
                   type="url"
                   id="productUrl"
@@ -185,7 +185,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="imageUpload">campaign Image</Label>
+                <Label htmlFor="imageUpload">Campaign Image</Label>
                 <div className="mt-1 flex items-center gap-4">
                   <Input
                     type="file"

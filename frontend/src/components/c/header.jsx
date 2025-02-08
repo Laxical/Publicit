@@ -28,7 +28,7 @@ export function Header() {
         <div className="ml-4">
           <Button asChild variant="outline" className="border-2 border-black">
             {/* <a href="#cta">Get Started</a> */}
-            <Link to="/add-product">Get Started</Link>
+            <Link to="/register-company">Get Started</Link>
           </Button>
         </div>
       </div>

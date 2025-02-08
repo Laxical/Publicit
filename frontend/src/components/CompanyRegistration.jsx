@@ -90,7 +90,7 @@ export default function CompanyRegistration() {
               <Alert variant="destructive" className="mt-6">
                 <AlertCircle className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>Company already exists</AlertDescription>
               </Alert>
             )}
           </CardContent>
