@@ -7,6 +7,7 @@ import Home from "./components/Home"
 import ProductDisplay from './components/ProductsDisplay';
 import LandingPage from './components/landingPage';
 import { Header } from './components/c/header';
+import LoginPage from './LoginPage';
 
 const App = () => {
   const { user } = usePrivy();
@@ -44,6 +45,7 @@ const App = () => {
             <Route path="/register-company" element={<CompanyRegistration />} />
             <Route path="/add-product" element={<AddProduct />} />
             <Route path="/product-display" element={<ProductDisplay />} />
+            <Route path='/Login' element={<LoginPage/>}/>
             <Route path="/" element={<LandingPage />} />
           </Routes>
         </main>
