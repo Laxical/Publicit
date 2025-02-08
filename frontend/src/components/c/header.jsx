@@ -1,10 +1,12 @@
+import { Link } from "react-router-dom"
 import { Button } from "../ui/button"
 
 export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-black bg-[#98FB98] backdrop-blur supports-[backdrop-filter]:bg-[#98FB98]/60 flex flex-col items-center">
       <div className="container flex h-14 items-center">
-        <a href="/" className="flex items-center space-x-2">
+        <a href="/" className="flex items-center space-x-1">
+        <img src="../public/publi-cite.png" alt="" className="h-12 w-12"/>
           <span className="text-2xl font-bold" style={{ fontFamily: "Courier, monospace" }}>
             publi-cité
           </span>
@@ -25,7 +27,8 @@ export function Header() {
         </nav>
         <div className="ml-4">
           <Button asChild variant="outline" className="border-2 border-black">
-            <a href="#cta">Get Started</a>
+            {/* <a href="#cta">Get Started</a> */}
+            <Link to="/add-product">Get Started</Link>
           </Button>
         </div>
       </div>
