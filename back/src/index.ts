@@ -16,6 +16,7 @@ import updatePolicy from "./utils/updatePolicy";
 import sendwebtransaction from "./utils/sendwebsiteTransaction";
 
 const upload = multer();
+const allowedOrigin = process.env.FRONTEND_URL;
 dotenv.config();
 mongoose.connect(process.env.MONGO_URI || "");
 
@@ -40,7 +41,10 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: allowedOrigin,
+    credentials: true,
+}));
 app.use(express.static("public"));
 
 interface ClickRequestBody {
