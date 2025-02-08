@@ -28,7 +28,6 @@ const dotenv_1 = __importDefault(require("dotenv"));
 const server_auth_1 = require("@privy-io/server-auth");
 const mongoose_1 = __importDefault(require("mongoose"));
 const companyschema_1 = __importDefault(require("./schema/companyschema"));
-const cors_1 = __importDefault(require("cors"));
 const policy_1 = __importDefault(require("./utils/policy"));
 const createWallet_1 = __importDefault(require("./utils/createWallet"));
 const sendTransaction_1 = __importDefault(require("./utils/sendTransaction"));
@@ -52,12 +51,15 @@ const privy = new server_auth_1.PrivyClient(process.env.PRIVY_APP_ID || "", proc
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
-app.use((0, cors_1.default)({
-    origin: allowedOrigin,
-    credentials: true,
-    methods: ["GET", "POST", "PATCH", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"]
-}));
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
+    next();
+});
 app.use(express_1.default.static("public"));
 app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
