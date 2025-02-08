@@ -88,16 +88,18 @@ app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(400).json({ error: "Redirect URL does not match the product URL" });
             return;
         }
-        const userAdKey = `${userAddress}-${productData.walletUniqueId}`;
-        yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
+        const userAdKey = `${userAddress}-${productData.userwalletUniqueId}`;
+        //USER REWARDD
+        yield (0, sendTransaction_1.default)(productData.userwalletUniqueId, {
             to: userAddress,
             value: productData.userReward
         }, userAdKey);
         console.log("hitt");
         const websiteReward = (productData.userReward * productData.websiteCommission) / 100;
         console.log("hitttt");
-        const webAdKey = `${websiteAddress}-${userAddress}-${productData.walletUniqueId}`;
-        yield (0, sendTransaction_1.default)(productData.walletUniqueId, {
+        const webAdKey = `${websiteAddress}-${userAddress}-${productData.commissionUniqueId}`;
+        //COMMISSION REWARD
+        yield (0, sendTransaction_1.default)(productData.commissionUniqueId, {
             to: websiteAddress,
             value: websiteReward
         }, webAdKey);
@@ -124,16 +126,34 @@ app.post("/api/create-wallet", (req, res) => __awaiter(void 0, void 0, void 0, f
                 walletAddress: company.products.get(product),
             });
         }
-        const policyIds = yield (0, policy_1.default)(userReward);
-        console.log("Policy ID:", policyIds);
-        const wallet = yield (0, createWallet_1.default)(policyIds);
-        if (!wallet) {
+        //userwallet creation
+        const userpolicyIds = yield (0, policy_1.default)(userReward);
+        console.log("Policy ID:", userpolicyIds);
+        const userwallet = yield (0, createWallet_1.default)(userpolicyIds);
+        if (!userwallet) {
             throw new Error("Failed to create wallet");
         }
-        const { id, address } = wallet;
-        console.log("Wallet created:", id, address, companyName, product, productUrl);
+        const { id: userwalletUniqueId, address: userAddress } = userwallet;
+        console.log("user Wallet created:", userwalletUniqueId, userAddress, companyName, product, productUrl);
+        //commsion wallet crreation
+        const commissionpolicyId = yield (0, policy_1.default)(userReward);
+        console.log("Policy ID:", userpolicyIds);
+        const Commissionwallet = yield (0, createWallet_1.default)(userpolicyIds);
+        if (!userwallet) {
+            throw new Error("Failed to create wallet");
+        }
+        if (!Commissionwallet) {
+            throw new Error("Failed to create commission wallet");
+        }
+        const { id: commissionUniqueId, address: CommissionAddress } = Commissionwallet;
+        console.log("user Wallet created:", userwalletUniqueId, userAddress, companyName, product, productUrl);
         if (company && company.products) {
-            company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl, walletAddress: address, userReward, websiteCommission });
+            company.products.set(product, {
+                productUrl, userwalletUniqueId: userwalletUniqueId, userpolicyId: userpolicyIds, imageUrl, userwalletAddress: userAddress, userReward, websiteCommission,
+                CommissionAddress: CommissionAddress,
+                commissionUniqueId: commissionUniqueId,
+                commissionpolicyId: commissionpolicyId
+            });
             yield company.save();
         }
         return res.status(200).json({ message: "Wallet created successfully!" });
@@ -175,7 +195,7 @@ app.get("/api/get-products/:companyName", (req, res) => __awaiter(void 0, void 0
         const filteredProducts = {};
         if (company.products) {
             for (const [key, product] of Object.entries(company.products)) {
-                const { walletUniqueId, policyId } = product, filteredProduct = __rest(product, ["walletUniqueId", "policyId"]);
+                const { userwalletUniqueId, userpolicyId, commissionpolicyId, commissionUniqueId } = product, filteredProduct = __rest(product, ["userwalletUniqueId", "userpolicyId", "commissionpolicyId", "commissionUniqueId"]);
                 filteredProducts[key] = filteredProduct;
             }
         }

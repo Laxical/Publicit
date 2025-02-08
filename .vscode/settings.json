@@ -2,6 +2,7 @@
     "postman.settings.dotenv-detection-notification-visibility": false,
     "cSpell.words": [
         "companyschema",
-        "sendwebtransaction"
+        "sendwebtransaction",
+        "userwallet"
     ]
 }

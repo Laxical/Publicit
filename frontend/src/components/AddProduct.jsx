@@ -20,6 +20,8 @@ export default function AddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const [websiteCommission,setWebsiteCommission]=useState(0);
   const [error, setError] = useState("")
+  const [date, setDate] = useState("");
+
   const backendapi=import.meta.env.VITE_BACKEND_API;
 
   useEffect(() => {
@@ -41,15 +43,20 @@ export default function AddProduct() {
         productUrl,
         imageUrl,
         userReward,
-        websiteCommission
+        websiteCommission,
+        date: date || null
+
       })
       setMessage(response.data.message)
-      if (response.data.walletAddress) {
+      if (response.data.userwalletAddress) {
         setCompanyName("")
         setProductName("")
         setProductUrl("")
         setFile(null)
         setUserReward(0);
+        setWebsiteCommission(0);
+        setDate("");
+
       }
     } catch (error) {
       setError(error.response?.data?.error || "An error occurred while adding the product.")
@@ -128,7 +135,7 @@ export default function AddProduct() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="UserReward">User Reward</Label>
+                <Label htmlFor="UserReward">Rewards per click</Label>
                 <Input
                   type="text"
                   id="=userReward"
@@ -152,7 +159,18 @@ export default function AddProduct() {
                   className="w-full"
                 />
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="date">Campaign End Date (optional)</Label>
+                <Input
+                  type="date"
+                  id="date"
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="w-full"
+                />
+              </div>
 
+          
               <div className="space-y-2">
                 <Label htmlFor="productUrl">campaign URL</Label>
                 <Input
