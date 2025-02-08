@@ -25,8 +25,6 @@ const App = () => {
             <Route path="/" element={<LandingPage />} />
           </Routes>
         </main>
-        
-      {/* </div> */}
     </Router>
   )
 }

@@ -223,7 +223,11 @@ return res.status(200).json("updated successfully")}catch(error){
   console.log("error",error);
 } 
 
-
+app.get("/api/test", (req: Request, res: Response) => {
+  res.status(200).json({
+    message: "Test route",
+  });
+})
 
 })
 app.listen(PORT, () => {
