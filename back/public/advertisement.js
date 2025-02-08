@@ -46,7 +46,7 @@
             return;
         }
 
-        fetch("http://localhost:3000/api/track-click", {
+        fetch(`https://publicite-backend.vercel.app/api/track-click`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ userAddress, companyName, redirectUrl, product, websiteAddress })

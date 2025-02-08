@@ -8,6 +8,7 @@ const WalletDashboard = () => {
   const [expandedWallet, setExpandedWallet] = useState(null)
   const [walletDetails, setWalletDetails] = useState({})
   const [showAllWallets, setShowAllWallets] = useState(false)
+  const backendapi=import.meta.env.VITE_BACKEND_API
 
   useEffect(() => {
     getAllWallets()
@@ -15,7 +16,7 @@ const WalletDashboard = () => {
 
   const createWallet = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/create-wallet")
+      const response = await axios.post(`${backendapi}/create-wallet`)
       setCurrentWallet(response.data)
       getAllWallets()
     } catch (error) {
@@ -25,7 +26,7 @@ const WalletDashboard = () => {
 
   const getAllWallets = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/get-all-wallets")
+      const response = await axios.get(`${backendapi}/get-all-wallets`)
       setWallets(response.data.data)
     } catch (error) {
       console.error("Error getting wallets:", error)
@@ -34,7 +35,7 @@ const WalletDashboard = () => {
 
   const getWalletDetails = async (id) => {
     try {
-      const response = await axios.get(`http://localhost:5000/get-wallet-details/${id}`)
+      const response = await axios.get(`${backendapi}/get-wallet-details/${id}`)
       setWalletDetails((prev) => ({ ...prev, [id]: response.data }))
     } catch (error) {
       console.error("Error getting wallet details:", error)

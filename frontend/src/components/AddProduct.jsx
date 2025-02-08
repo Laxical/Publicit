@@ -20,6 +20,8 @@ export default function AddProduct() {
   const [isLoading, setIsLoading] = useState(false);
   const [websiteCommission,setWebsiteCommission]=useState(0);
   const [error, setError] = useState("")
+  const backendapi=import.meta.env.VITE_BACKEND_API
+
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -29,7 +31,7 @@ export default function AddProduct() {
 
     try {
       const imageUrl = await handleImageUpload()
-      const response = await axios.post("http://localhost:3000/api/create-wallet", {
+      const response = await axios.post(`${backendapi}/api/create-wallet`, {
         companyName,
         product: productName,
         productUrl,

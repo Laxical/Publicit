@@ -9,6 +9,9 @@ import { AlertCircle, Copy, Loader2, Plus } from "lucide-react"
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
+
+
+
 export default function ProductDisplay() {
   const [companyName, setCompanyName] = useState("")
   const [products, setProducts] = useState(null)
@@ -16,6 +19,7 @@ export default function ProductDisplay() {
   const [isLoading, setIsLoading] = useState(false)
   const [balances, setBalances] = useState({})
   const [ethAmount, setEthAmount] = useState("")
+  const backendapi=import.meta.env.VITE_BACKEND_API
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -25,7 +29,7 @@ export default function ProductDisplay() {
     setBalances({})
 
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-products/${companyName}`)
+      const response = await axios.get(`${backendapi}/api/get-products/${companyName}`)
       setProducts(response.data.company.products)
       console.log(response.data.company.products)
     } catch (error) {
@@ -46,7 +50,7 @@ export default function ProductDisplay() {
 
   const getBalance = async (walletAddress, productName) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-balance/${walletAddress}`)
+      const response = await axios.get(`${backendapi}/api/get-balance/${walletAddress}`)
       setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
     } catch (error) {
       console.log(error)
@@ -101,7 +105,7 @@ export default function ProductDisplay() {
   }
 
   const generateSnippet = (productName, productData) => {
-    const htmlSnippet = `<script async src="http://localhost:3000/advertisement.js" 
+    const htmlSnippet = `<script async src="${backendapi}/advertisement.js" 
   data-ad-image="${productData.imageUrl}" 
   data-ad-width="400px" 
   data-ad-height="350px" 
@@ -123,7 +127,7 @@ const AdComponent = () => {
       hasRun.current = true;
 
       const script = document.createElement("script");
-      script.src = "http://localhost:3000/advertisement.js";
+      script.src = "${backendapi}/advertisement.js";
       script.async = true;
 
       script.setAttribute("data-ad-image", "${productData.imageUrl}");

@@ -11,9 +11,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 
 function CampaignCard({ productName, productData, balance, companyName, websiteAddress }) {
   const [isOpen, setIsOpen] = useState(false);
+  const backendapi=import.meta.env.VITE_BACKEND_API
 
   const generateSnippet = (productName, productData) => {
-    const htmlSnippet = `<script async src="http://localhost:3000/advertisement.js" 
+    const htmlSnippet = `<script async src="${backendapi}/advertisement.js" 
   data-ad-image="${productData.imageUrl}" 
   data-ad-width="400px" 
   data-ad-height="350px" 
@@ -35,7 +36,7 @@ const AdComponent = () => {
       hasRun.current = true;
 
       const script = document.createElement("script");
-      script.src = "http://localhost:3000/advertisement.js";
+      script.src = "${backendapi}/advertisement.js";
       script.async = true;
 
       script.setAttribute("data-ad-image", "${productData.imageUrl}");
