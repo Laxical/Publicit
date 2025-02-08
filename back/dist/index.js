@@ -36,6 +36,7 @@ const axios_1 = __importDefault(require("axios"));
 const multer_1 = __importDefault(require("multer"));
 const updatePolicy_1 = __importDefault(require("./utils/updatePolicy"));
 const upload = (0, multer_1.default)();
+const allowedOrigin = process.env.FRONTEND_URL;
 dotenv_1.default.config();
 mongoose_1.default.connect(process.env.MONGO_URI || "");
 const db = mongoose_1.default.connection;
@@ -51,7 +52,10 @@ const privy = new server_auth_1.PrivyClient(process.env.PRIVY_APP_ID || "", proc
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3000;
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({
+    origin: allowedOrigin,
+    credentials: true,
+}));
 app.use(express_1.default.static("public"));
 app.post("/api/track-click", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
