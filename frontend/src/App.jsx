@@ -11,9 +11,6 @@ import LoginPage from './LoginPage';
 import Campaigns from './components/Campaigns';
 
 const App = () => {
-  const { user } = usePrivy();
-  const [smartWallet, setSmartWallet] = useState(null);
-
   return (
     <Router>
         <Header/>

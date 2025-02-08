@@ -38,7 +38,7 @@ export default function AddProduct() {
         websiteCommission
       })
       setMessage(response.data.message)
-      if (response.data.walletAddress) {
+      if (response.data.userwalletAddress) {
         setCompanyName("")
         setProductName("")
         setProductUrl("")

@@ -9,7 +9,7 @@ import { AlertCircle, Copy, Loader2, Plus, ChevronDown, ChevronUp } from "lucide
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
-function CampaignCard({ productName, productData, balance, companyName, websiteAddress }) {
+function CampaignCard({ productName, productData, balance, commissionBalance, companyName, websiteAddress }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const generateSnippet = (productName, productData) => {
@@ -57,8 +57,6 @@ export default AdComponent;`;
     return { htmlSnippet, reactSnippet };
   };
 
-  const { htmlSnippet, reactSnippet } = generateSnippet(productName, productData);
-
   const copyToClipboard = (text, message = "Copied to clipboard!") => {
     navigator.clipboard.writeText(text).then(
       () => {
@@ -70,56 +68,93 @@ export default AdComponent;`;
     );
   };
 
+  const { htmlSnippet, reactSnippet } = generateSnippet(productName, productData);
+
   return (
     <Card className="overflow-hidden">
       <CardHeader>
         <CardTitle className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
           <span className="text-3xl mb-2 sm:mb-0">{productName}</span>
           <div className="text-sm font-normal flex flex-col sm:items-end">
-            <div className="flex items-center mb-1">
-              <span className="mr-2 font-semibold">Wallet:</span>
-              <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-                {productData.walletAddress.slice(0, 6)}...{productData.walletAddress.slice(-4)}
-              </code>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="ml-2"
-                      onClick={() => copyToClipboard(productData.walletAddress, "Wallet address copied!")}
-                    >
-                      <Copy className="h-4 w-4" />
-                      <span className="sr-only">Copy wallet address</span>
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Copy wallet address</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
-            <div className="flex items-center">
-              <span className="mr-2 font-semibold">Balance:</span>
-              <span className="font-medium">{balance !== undefined ? `${balance} ETH` : "Loading..."}</span>
+            <div className="space-y-2">
+              <div className="flex flex-col">
+                <div className="flex items-center mb-1">
+                  <span className="mr-2 font-semibold">User Reward Wallet:</span>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                    {productData.userwalletAddress.slice(0, 6)}...{productData.userwalletAddress.slice(-4)}
+                  </code>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="ml-2"
+                          onClick={() => copyToClipboard(productData.userwalletAddress, "User wallet address copied!")}
+                        >
+                          <Copy className="h-4 w-4" />
+                          <span className="sr-only">Copy user wallet address</span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copy user wallet address</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                <div className="flex items-center ml-4">
+                  <span className="mr-2 font-semibold">Balance:</span>
+                  <span className="font-medium">{balance !== undefined ? `${balance} ETH` : "Loading..."}</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col">
+                <div className="flex items-center mb-1">
+                  <span className="mr-2 font-semibold">Commission Address:</span>
+                  <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                    {productData.CommissionAddress.slice(0, 6)}...{productData.CommissionAddress.slice(-4)}
+                  </code>
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="ml-2"
+                          onClick={() => copyToClipboard(productData.CommissionAddress, "Commission address copied!")}
+                        >
+                          <Copy className="h-4 w-4" />
+                          <span className="sr-only">Copy commission address</span>
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Copy commission address</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
+                <div className="flex items-center ml-4">
+                  <span className="mr-2 font-semibold">Balance:</span>
+                  <span className="font-medium">{commissionBalance !== undefined ? `${commissionBalance} ETH` : "Loading..."}</span>
+                </div>
+              </div>
             </div>
           </div>
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="mb-4 flex ">
-            <img
-                src={productData.imageUrl || "/placeholder.svg"}
-                alt={productName}
-                className="rounded-md w-full h-auto"
-                style={{ maxWidth: "400px", maxHeight: "350px" }}
-            />
-            <div className="p-4">
-                <div><span className="font-bold">User incentives:</span> {productData.userReward}</div>
-                <div><span className="font-bold">Website commision:</span> {productData.websiteCommission}</div>
-                <div><span className="font-bold">Campaign Url:</span> {productData.productUrl}</div>
-            </div>
+        <div className="mb-4 flex">
+          <img
+            src={productData.imageUrl || "/placeholder.svg"}
+            alt={productName}
+            className="rounded-md w-full h-auto"
+            style={{ maxWidth: "400px", maxHeight: "350px" }}
+          />
+          <div className="p-4">
+            <div><span className="font-bold">User incentives:</span> {productData.userReward}</div>
+            <div><span className="font-bold">Website commision:</span> {productData.websiteCommission}</div>
+            <div><span className="font-bold">Campaign Url:</span> {productData.productUrl}</div>
+          </div>
         </div>
         <Button
           onClick={() => setIsOpen(!isOpen)}
@@ -176,6 +211,7 @@ export default function Campaigns() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [balances, setBalances] = useState({})
+  const [commissionBalances, setCommissionBalances] = useState({})
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -183,11 +219,11 @@ export default function Campaigns() {
     setError("")
     setProducts(null)
     setBalances({})
+    setCommissionBalances({})
 
     try {
       const response = await axios.get(`http://localhost:3000/api/get-products/${companyName}`)
       setProducts(response.data.company.products)
-      console.log(response.data.company.products)
     } catch (error) {
       console.log(error)
       setError("Failed to fetch products. Please try again.")
@@ -199,18 +235,23 @@ export default function Campaigns() {
   useEffect(() => {
     if (products) {
       Object.entries(products).forEach(([productName, productData]) => {
-        getBalance(productData.walletAddress, productName)
+        getBalance(productData.userwalletAddress, productName, 'user')
+        getBalance(productData.CommissionAddress, productName, 'commission')
       })
     }
   }, [products])
 
-  const getBalance = async (walletAddress, productName) => {
+  const getBalance = async (address, productName, type) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-balance/${walletAddress}`)
-      setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
+      const response = await axios.get(`http://localhost:3000/api/get-balance/${address}`)
+      if (type === 'user') {
+        setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
+      } else {
+        setCommissionBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
+      }
     } catch (error) {
       console.log(error)
-      setError("Failed to fetch balance. Please try again.")
+      setError(`Failed to fetch ${type} balance. Please try again.`)
     }
   }
 
@@ -287,6 +328,7 @@ export default function Campaigns() {
                   productName={productName}
                   productData={productData}
                   balance={balances[productName]}
+                  commissionBalance={commissionBalances[productName]}
                   companyName={companyName}
                   websiteAddress={websiteAddress}
                 />
@@ -296,5 +338,5 @@ export default function Campaigns() {
         )}
       </div>
     </section>
-  )
+  );
 }

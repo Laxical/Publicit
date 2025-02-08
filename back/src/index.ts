@@ -79,18 +79,18 @@ app.post("/api/track-click", async (req: Request<{}, {}, ClickRequestBody>, res:
         return;
       }
 
-      const userAdKey = `${userAddress}-${productData.walletUniqueId}`;
-
-      await sendTransaction(productData.walletUniqueId, {
+      const userAdKey = `${userAddress}-${productData.userwalletUniqueId}`;
+      //USER REWARDD
+      await sendTransaction(productData.userwalletUniqueId, {
         to: userAddress,
         value: productData.userReward
       }, userAdKey);
       console.log("hitt");
       const websiteReward=(productData.userReward*productData.websiteCommission)/100;
       console.log("hitttt")
-      const webAdKey = `${websiteAddress}-${userAddress}-${productData.walletUniqueId}`;
-
-      await sendTransaction(productData.walletUniqueId, {
+      const webAdKey = `${websiteAddress}-${userAddress}-${productData.commissionUniqueId}`;
+      //COMMISSION REWARD
+      await sendTransaction(productData.commissionUniqueId, {
         to: websiteAddress,
         value: websiteReward
       },webAdKey);
@@ -120,17 +120,36 @@ app.post("/api/create-wallet", async (req: Request, res: Response): Promise<any>
         walletAddress: company.products.get(product),
       });
     }
-
-    const policyIds= await postPolicy(userReward);
-    console.log("Policy ID:", policyIds);
-    const wallet = await createWallet(policyIds);
-    if (!wallet) {
+    //userwallet creation
+    const userpolicyIds= await postPolicy(userReward);
+    console.log("Policy ID:", userpolicyIds);
+    const userwallet = await createWallet(userpolicyIds);
+    if (!userwallet) {
       throw new Error("Failed to create wallet");
     }
-    const { id, address } = wallet;
-    console.log("Wallet created:", id, address, companyName, product, productUrl);
+    const { id:userwalletUniqueId, address:userAddress } = userwallet;
+    console.log("user Wallet created:", userwalletUniqueId, userAddress, companyName, product, productUrl);
+    //commsion wallet crreation
+    const commissionpolicyId= await postPolicy(userReward);
+    console.log("Policy ID:", userpolicyIds);
+    const Commissionwallet = await createWallet(userpolicyIds);
+    if (!userwallet) {
+      throw new Error("Failed to create wallet");
+    }
+    if (!Commissionwallet) {
+      throw new Error("Failed to create commission wallet");
+    }
+    const { id:commissionUniqueId, address:CommissionAddress } = Commissionwallet;
+    console.log("user Wallet created:", userwalletUniqueId, userAddress, companyName, product, productUrl);
+
+
     if (company && company.products) {
-      company.products.set(product, { productUrl, walletUniqueId: id, policyId: policyIds, imageUrl, walletAddress: address,userReward,websiteCommission});
+      company.products.set(product, {
+        productUrl, userwalletUniqueId: userwalletUniqueId, userpolicyId: userpolicyIds, imageUrl, userwalletAddress: userAddress, userReward, websiteCommission,
+        CommissionAddress: CommissionAddress,
+        commissionUniqueId: commissionUniqueId,
+        commissionpolicyId: commissionpolicyId
+      });
       await company.save();
     }
     return res.status(200).json({ message: "Wallet created successfully!" });
@@ -180,7 +199,7 @@ app.get("/api/get-products/:companyName", async (req: Request, res: Response): P
     const filteredProducts: Record<string, any> = {};
     if (company.products) {
       for (const [key, product] of Object.entries(company.products)) {
-        const { walletUniqueId, policyId, ...filteredProduct } = product;
+        const {userwalletUniqueId, userpolicyId,commissionpolicyId,commissionUniqueId,...filteredProduct } = product;
         filteredProducts[key] = filteredProduct;
       }
     }

@@ -39,14 +39,14 @@ export default function ProductDisplay() {
   useEffect(() => {
     if (products) {
       Object.entries(products).forEach(([productName, productData]) => {
-        getBalance(productData.walletAddress, productName)
+        getBalance(productData.userwalletAddress, productName)
       })
     }
   }, [products])
 
-  const getBalance = async (walletAddress, productName) => {
+  const getBalance = async (userwalletAddress, productName) => {
     try {
-      const response = await axios.get(`http://localhost:3000/api/get-balance/${walletAddress}`)
+      const response = await axios.get(`http://localhost:3000/api/get-balance/${userwalletAddress}`)
       setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
     } catch (error) {
       console.log(error)
@@ -209,7 +209,7 @@ export default AdComponent;`
                             <div className="flex items-center mb-1">
                               <span className="mr-2 font-semibold">Wallet:</span>
                               <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-                                {productData.walletAddress.slice(0, 6)}...{productData.walletAddress.slice(-4)}
+                                {productData.userwalletAddress.slice(0, 6)}...{productData.userwalletAddress.slice(-4)}
                               </code>
                               <TooltipProvider>
                                 <Tooltip>
@@ -219,7 +219,7 @@ export default AdComponent;`
                                       size="icon"
                                       className="ml-2"
                                       onClick={() =>
-                                        copyToClipboard(productData.walletAddress, "Wallet address copied!")
+                                        copyToClipboard(productData.userwalletAddress, "Wallet address copied!")
                                       }
                                     >
                                       <Copy className="h-4 w-4" />
@@ -253,7 +253,7 @@ export default AdComponent;`
                                       <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => addEthToWallet(productData.walletAddress)}
+                                        onClick={() => addEthToWallet(productData.userwalletAddress)}
                                       >
                                         <Plus className="h-4 w-4 mr-1" />
                                         Add ETH
