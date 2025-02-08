@@ -1,5 +1,5 @@
 import { Button } from "../ui/button"
-
+import { Link } from "react-router-dom"
 export function Hero() {
   return (
     <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 relative overflow-hidden flex flex-col items-center" >
@@ -12,7 +12,7 @@ Revolutionize Digital Advertising with Web3        </h1>
         <p className="max-w-[600px] mt-4 text-gray-700 md:text-xl">
         Connect advertisers with users directly. Earn crypto rewards for engaging with ads. Transform the future of digital marketing.        </p>
         <Button asChild className="mt-8" size="lg">
-          <a href="#cta">Get Started</a>
+          <Link to="/register-company">Get Started</Link>
         </Button>
       </div>
       <div className="absolute inset-0 z-0">

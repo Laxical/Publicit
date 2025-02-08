@@ -1,18 +1,18 @@
-import { CreditCard, Sparkles, TrendingUp, Wallet } from "lucide-react"
+import { Code, CreditCard, FilePlus, MousePointerClick, Sparkles, TrendingUp, Wallet } from "lucide-react"
 
 export function HowItWorks() {
   const steps = [
-    { icon: <CreditCard className="h-10 w-10" />, title: "Sign Up", description: "Apply online in minutes" },
-    { icon: <Wallet className="h-10 w-10" />, title: "Get Your Card", description: "Instant virtual card access" },
+    { icon: <Wallet className="h-10 w-10" />, title: "Register ", description: "Register your company on Publi-cité" },
+    { icon: <FilePlus className="h-10 w-10" />, title: "Create an Ad Campaign", description: "Set campaign name, URL, images, user rewards & website commission." },
     {
-      icon: <Sparkles className="h-10 w-10" />,
-      title: "Start Earning Rewards",
-      description: "Cashback on everyday spending",
+      icon: <Code className="h-10 w-10" />,
+      title: "Get Embed Links",
+      description: "Publi-cité generates embed links for third-party websites.",
     },
     {
-      icon: <TrendingUp className="h-10 w-10" />,
-      title: "Build Credit",
-      description: "Improve your credit score over time",
+      icon: <MousePointerClick className="h-10 w-10" />,
+      title: "Users Interact & Earn",
+      description: "Users click ads, confirm via MetaMask, and receive rewards instantly.",
     },
   ]
 

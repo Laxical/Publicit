@@ -1,26 +1,26 @@
-import { Banknote, BookOpen, Lock, PiggyBank } from "lucide-react"
+import { Server,Key,ShieldCheck,Link2, KeyRoundIcon } from "lucide-react"
 
 export function Features() {
   const features = [
     {
-      icon: <Banknote className="h-10 w-10" />,
-      title: "Smart Rewards",
-      description: "Earn cashback on everyday spending",
+      icon: <Server className="h-10 w-10" />,
+      title: "Privy Server Wallets",
+      description: "Secure and seamless ad payments with server-side wallets.",
     },
     {
-      icon: <Lock className="h-10 w-10" />,
-      title: "Transparent Fees",
-      description: "No annual fees, no hidden charges",
+      icon: <KeyRoundIcon className="h-10 w-10" />,
+      title: "Idempotency Keys",
+      description: "Ensure safe and reliable transactions without duplicates.",
     },
     {
-      icon: <BookOpen className="h-10 w-10" />,
-      title: "Financial Education",
-      description: "Access to tips and tools for managing money",
+      icon: <ShieldCheck className="h-10 w-10" />,
+      title: "Privy Policy Engine",
+      description: "Define and enforce policies to regulate ad interactions and security.",
     },
     {
-      icon: <PiggyBank className="h-10 w-10" />,
-      title: "Credit Building",
-      description: "Report to credit bureaus to help build credit history",
+      icon: <Link2 className="h-10 w-10" />,
+      title: "Embedded Links",
+      description: "Easily integrate ad campaigns across third-party websites.",
     },
   ]
 
@@ -31,7 +31,7 @@ export function Features() {
           className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl text-center mb-12"
           style={{ fontFamily: "Courier, monospace" }}
         >
-          Features & Benefits
+          Tech Stack
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {features.map((feature, index) => (

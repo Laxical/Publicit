@@ -14,10 +14,10 @@ function LandingPage() {
         <Hero />
         <HowItWorks />
         <Features />
-        <Testimonials />
-        <Security />
-        <Pricing />
-        <CTA />
+        {/* <Testimonials /> */}
+        {/* <Security />
+        <Pricing /> */}
+        {/* <CTA /> */}
     </div>
   )
 }
