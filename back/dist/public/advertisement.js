@@ -34,7 +34,7 @@
     adContainer.style.cursor = "pointer";
     adContainer.innerHTML = `<img src="${adImageUrl}" width="${adWidth}" height="${adHeight}" />`;
 
-    document.body.appendChild(adContainer);
+    scriptTag.parentNode.insertBefore(adContainer, scriptTag);
 
     adContainer.addEventListener("click", async function () {
 
