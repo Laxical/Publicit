@@ -9,11 +9,14 @@ const companySchema = new mongoose_1.default.Schema({
     products: {
         type: Map,
         of: {
-            walletAddress: { type: String, required: true },
+            userwalletAddress: { type: String, required: true },
+            CommissionAddress: { type: String, required: true },
             imageUrl: { type: String, required: true },
             productUrl: { type: String, required: true },
-            walletUniqueId: { type: String, required: true },
-            policyId: { type: String, required: true },
+            userwalletUniqueId: { type: String, required: true },
+            commissionUniqueId: { type: String, required: true },
+            userpolicyId: { type: String, required: true },
+            commissionpolicyId: { type: String, required: true },
             userReward: { type: Number, required: true },
             websiteCommission: { type: Number, required: true },
         },

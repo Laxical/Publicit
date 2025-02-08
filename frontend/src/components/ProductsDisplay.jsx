@@ -18,7 +18,9 @@ export default function ProductDisplay() {
   const [error, setError] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const [balances, setBalances] = useState({})
+  const [commissionBalances, setCommissionBalances] = useState({})
   const [ethAmount, setEthAmount] = useState("")
+  const [commissionEthAmount, setCommissionEthAmount] = useState("");
   const backendapi=import.meta.env.VITE_BACKEND_API
 
   const handleSubmit = async (e) => {
@@ -27,9 +29,11 @@ export default function ProductDisplay() {
     setError("")
     setProducts(null)
     setBalances({})
+    setCommissionBalances({})
 
     try {
       const response = await axios.get(`${backendapi}/api/get-products/${companyName}`)
+      console.log(response.data);
       setProducts(response.data.company.products)
       console.log(response.data.company.products)
     } catch (error) {
@@ -43,28 +47,34 @@ export default function ProductDisplay() {
   useEffect(() => {
     if (products) {
       Object.entries(products).forEach(([productName, productData]) => {
-        getBalance(productData.walletAddress, productName)
+        getBalance(productData.userwalletAddress, productName, 0)
+        getBalance(productData.CommissionAddress, productName, 1)
       })
     }
   }, [products])
 
-  const getBalance = async (walletAddress, productName) => {
+  const getBalance = async (userwalletAddress, productName, flag) => {
     try {
-      const response = await axios.get(`${backendapi}/api/get-balance/${walletAddress}`)
-      setBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
+      const response = await axios.get(`${backendapi}/api/get-balance/${userwalletAddress}`);
+      (flag === 0) ? setBalances((prev) => ({ ...prev, [productName]: response.data.balance })) : setCommissionBalances((prev) => ({ ...prev, [productName]: response.data.balance }))
     } catch (error) {
       console.log(error)
       setError("Failed to fetch balance. Please try again.")
     }
   }
 
-  const addEthToWallet = async (recipientAddress) => {
+  const addEthToWallet = async (recipientAddress, flag) => {
     if (!window.ethereum) {
       alert("MetaMask is not installed!")
       return
     }
   
-    if (!ethAmount || isNaN(ethAmount) || parseFloat(ethAmount) <= 0) {
+    if ((!ethAmount || isNaN(ethAmount) || parseFloat(ethAmount) <= 0) && flag === 0) {
+      alert("Please enter a valid amount of ETH!")
+      return
+    }
+
+    if ((!commissionEthAmount || isNaN(commissionEthAmount) || parseFloat(commissionEthAmount) <= 0) && flag !== 0) {
       alert("Please enter a valid amount of ETH!")
       return
     }
@@ -74,11 +84,14 @@ export default function ProductDisplay() {
   
       const provider = new ethers.BrowserProvider(window.ethereum)
       const signer = await provider.getSigner()
-  
-      const tx = await signer.sendTransaction({
+      let tx;
+      (flag === 0) ? tx = await signer.sendTransaction({
         to: recipientAddress,
         value: ethers.parseEther(ethAmount),
-      })
+      }) : tx = await signer.sendTransaction({
+        to: recipientAddress,
+        value: ethers.parseEther(commissionEthAmount),
+      }) 
   
       alert("Transaction sent! Waiting for confirmation...")
   
@@ -86,9 +99,11 @@ export default function ProductDisplay() {
   
       alert("Transaction successful!")
       setEthAmount("")
+      setCommissionBalances("");
     } catch (error) {
       console.error("Transaction failed:", error)
       setEthAmount("")
+      setCommissionBalances("");
       alert(`Transaction failed!\nError: ${error.message}`)
     }
   }
@@ -211,9 +226,9 @@ export default AdComponent;`
                           <span className="text-3xl mb-2 sm:mb-0">{productName}</span>
                           <div className="text-sm font-normal flex flex-col sm:items-end">
                             <div className="flex items-center mb-1">
-                              <span className="mr-2 font-semibold">Wallet:</span>
+                              <span className="mr-2 font-semibold">User Wallet:</span>
                               <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
-                                {productData.walletAddress.slice(0, 6)}...{productData.walletAddress.slice(-4)}
+                                {productData.userwalletAddress.slice(0, 6)}...{productData.userwalletAddress.slice(-4)}
                               </code>
                               <TooltipProvider>
                                 <Tooltip>
@@ -223,7 +238,7 @@ export default AdComponent;`
                                       size="icon"
                                       className="ml-2"
                                       onClick={() =>
-                                        copyToClipboard(productData.walletAddress, "Wallet address copied!")
+                                        copyToClipboard(productData.userwalletAddress, "Wallet address copied!")
                                       }
                                     >
                                       <Copy className="h-4 w-4" />
@@ -257,7 +272,69 @@ export default AdComponent;`
                                       <Button
                                         variant="outline"
                                         size="sm"
-                                        onClick={() => addEthToWallet(productData.walletAddress)}
+                                        onClick={() => addEthToWallet(productData.userwalletAddress, 0)}
+                                      >
+                                        <Plus className="h-4 w-4 mr-1" />
+                                        Add ETH
+                                      </Button>
+                                    </div>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Add ETH to this wallet</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                          </div>
+                          <div className="text-sm font-normal flex flex-col sm:items-end">
+                            <div className="flex items-center mb-1">
+                              <span className="mr-2 font-semibold">Commission Wallet:</span>
+                              <code className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded text-xs">
+                                {productData.CommissionAddress.slice(0, 6)}...{productData.CommissionAddress.slice(-4)}
+                              </code>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      className="ml-2"
+                                      onClick={() =>
+                                        copyToClipboard(productData.CommissionAddress, "Wallet address copied!")
+                                      }
+                                    >
+                                      <Copy className="h-4 w-4" />
+                                      <span className="sr-only">Copy wallet address</span>
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Copy wallet address</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="mr-2 font-semibold">Balance:</span>
+                              <span className="font-medium">
+                                {commissionBalances[productName] !== undefined ? `${commissionBalances[productName]} ETH` : "Loading..."}
+                              </span>
+                            </div>
+                            <div className="flex items-center">
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <div className="flex items-center space-x-2 mt-2">
+                                      <Input
+                                        type="number"
+                                        placeholder="Enter ETH amount"
+                                        value={commissionEthAmount}
+                                        onChange={(e) => setCommissionEthAmount(e.target.value)}
+                                        className="w-24"
+                                      />
+                                      <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => addEthToWallet(productData.CommissionAddress, 1)}
                                       >
                                         <Plus className="h-4 w-4 mr-1" />
                                         Add ETH

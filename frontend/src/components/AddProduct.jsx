@@ -48,7 +48,7 @@ export default function AddProduct() {
 
       })
       setMessage(response.data.message)
-      if (response.data.walletAddress) {
+      if (response.data.userwalletAddress) {
         setCompanyName("")
         setProductName("")
         setProductUrl("")
