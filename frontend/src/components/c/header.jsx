@@ -6,7 +6,7 @@ export function Header() {
     <header className="sticky top-0 z-50 w-full border-b border-black bg-[#98FB98] backdrop-blur supports-[backdrop-filter]:bg-[#98FB98]/60 flex flex-col items-center">
       <div className="container flex h-14 items-center">
         <a href="/" className="flex items-center space-x-1">
-        <img src="../public/publi-cite.png" alt="" className="h-12 w-12"/>
+        <img src="https://res.cloudinary.com/dgjqg72wo/image/upload/v1739045259/ijxpyczxa0qmyog9gego.png" alt="logo" className="h-12 w-12"/>
           <span className="text-2xl font-bold" style={{ fontFamily: "Courier, monospace" }}>
             publi-cité
           </span>
